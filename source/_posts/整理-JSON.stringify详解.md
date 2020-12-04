@@ -15,8 +15,6 @@ b.toString()   //数组的toString被重写了，所以输出"1,2,3"
 
 JSON.stringify将JSON对象序列化时也用到了toString()
 
-<!--more-->
-
 ### 先说结论
 
 * 安全的JSON值可以序列化，不安全的JSON值会特殊处理

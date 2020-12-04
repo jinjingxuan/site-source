@@ -9,8 +9,6 @@ categories: Vue
 * vue-devtools
 * 模拟 Vuex
 
-<!--more-->
-
 ## 什么是 Vuex
 
 * Vuex 是专门为 Vue.js 设计的状态管理库
@@ -19,8 +17,6 @@ categories: Vue
 * 它的作用是进行状态管理，解决复杂组件通信，数据共享
 * 如果不打算开发大型单页应用，使用 Vuex 可能是繁琐冗余的。
 * [官网](https://vuex.vuejs.org/zh/)
-
-![1](https://vuex.vuejs.org/vuex.png)
 
 ## 核心概念
 

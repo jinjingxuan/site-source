@@ -8,8 +8,7 @@ categories: git
 * git reset原理：<https://www.cnblogs.com/wangwenjin2026/p/11549285.html> 
 * commit规范
 * 什么是fork：https://www.liaoxuefeng.com/wiki/896043488029600/900937935629664
-
-<!--more-->
+* git rebase
 
 ## commit 规范
 
@@ -25,3 +24,10 @@ categories: git
 ## fork
 
 参考：https://www.liaoxuefeng.com/wiki/896043488029600/900937935629664
+
+## git rebase
+
+* git rebase -i：合并多次提交记录
+* git rebase master：与 merge 的区别是不会有 merge 的 commit，保持干净的提交记录
+
+参考[这一次彻底搞懂 Git Rebase](https://www.codercto.com/a/45325.html)，[完美生活：git rebase -i | Linux 中国](https://zhuanlan.zhihu.com/p/141871803)，[【Git】rebase 用法小结](https://www.jianshu.com/p/4a8f4af4e803)

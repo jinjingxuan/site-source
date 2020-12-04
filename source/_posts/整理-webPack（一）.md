@@ -11,15 +11,13 @@ categories: webpack
 * 模块加载方式
 * 自己创建一个loader
 
-<!--more--> 
-
 ## webpack初体验
 
 >  webpack是一种前端资源构建工具，一个静态模块打包器（module bundler）。在webpack看来，前端的所有资源文件（js/json/css/img/less…）都会作为模块处理。它将根据模块的依赖关系进行静态分析，打包生成对应的静态资源（bundle）
 
 安装：`cnpm install -D webpack webpack-cli`，举例：比如此时有如下的目录结构
 
-```
+```js
 |--src
     --heading.js  // 遵循ES Modules
     --index.js
@@ -35,7 +33,7 @@ categories: webpack
 
 运行`webpack`命令
 
-```
+```js
 |--dist
     --main.js // 打包后的js文件
 |--src
@@ -104,7 +102,7 @@ import './main.css'
 * 超出10KB的文件单独提取存放在dist中
 * 小于10KB的文件转换为 Data URLs 嵌入代码中（base64编码）
 
-```
+```js
 |--dist
     --bundle.js 
     --aaa0e...png // 打包后的图片

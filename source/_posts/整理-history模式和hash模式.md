@@ -6,8 +6,8 @@ categories: 前端路由
 
 * hash模式
 * history模式
-
-<!--more-->
+* 根据权限动态添加路由列表
+* 配置路由meta属性
 
 ## hash模式
 
@@ -224,5 +224,87 @@ window.addEventListener('popstate', function(event) {
 </script>
 ```
 
+## 根据权限动态添加路由列表
 
+* 业务场景：不同用户调用权限接口获得的权限是不同的，根据用户权限动态展示路由列表
+
+```js
+		 api.getAuditInfo({
+             account: username,
+         }).then(res => {
+             console.log('权限代码:', res)
+             // 高级权限：可以查看某一块路由
+             if (res.includes('auth0')) {
+                 window.authInfo = true
+                 // 添加路由
+                 this.$router.addRoutes(videoRoutes)
+                 this.$router.options.routes.push(...videoRoutes)
+             // 普通权限
+             } else if (res.includes('auth1') && !res.includes('auth0')) {
+                 window.authInfo = false
+             // 没有权限时返回
+             } else {
+                 window.location.href = `
+             }
+         })
+```
+
+## 配置路由meta属性
+
+* 业务场景：同一个组件在不同路由下的展示状态是不同的，这时可以配置路由meta属性来实现
+
+```js
+const routes = [
+    {
+        path: '/audit/video',
+        name: '视频管理',
+        component: Layout,
+        children: [
+            {
+                path: 'videoList',
+                name: '视频列表',
+                meta: {
+                    noCache: true,
+                    cityChange: true,
+                },
+                component: auditvideoList
+            },
+            {
+                path: 'auditList',
+                name: '审核列表',
+                // 配置 meta 属性
+                meta: {
+                    noCache: true,
+                    cityDefault: true 
+                },
+                component: auditList
+            }
+        ]
+    },
+    {
+        path: '*',
+        redirect: '/audit/agent',
+        hidden: true
+    }
+]
+```
+
+* 比如说 header 中的一个组件，不同路由页面均展示，只是状态不同
+
+```vue
+<template>
+    <div v-if="!cityDefault"></div>
+	<div v-else ></div>
+</template>	
+	
+<script>
+computed: {
+        cityDefault() {
+            return this.$route.meta.cityDefault;
+        }
+    },
+</script>
+```
+
+## 
 

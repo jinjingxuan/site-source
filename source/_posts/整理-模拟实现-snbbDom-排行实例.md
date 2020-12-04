@@ -8,15 +8,13 @@ categories: 虚拟DOM与diff算法
 * 代码地址：https://github.com/jinjingxuan/part3_module1_task/tree/master/code_3
 * 构建工具 parcel
 
-<!--more-->
-
 ## parcel
 
 parcel 官网：https://zh.parceljs.org/getting_started.html
 
 安装流程
 
-```
+```js
 npm install -g parcel-bundler
 ```
 
@@ -28,13 +26,13 @@ npm init -y
 
 Parcel 内置了一个当你改变文件时能够自动重新构建应用的开发服务器，而且为了实现快速开发，该开发服务器支持[热模块替换](https://zh.parceljs.org/hmr.html)。只需要在入口文件指出：
 
-```
+```js
 parcel index.html
 ```
 
 ## 安装 snabbdom
 
-```
+```js
 cnpm i -D snabbdom
 ```
 

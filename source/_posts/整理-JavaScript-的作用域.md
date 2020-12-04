@@ -1,10 +1,10 @@
 ---
-title: 谈谈 JavaScript 的作用域
+title: 谈谈JavaScript的作用域
 date: 2018-11-01 10:00:54
 categories: JavaScript
 ---
 
-### 全局作用域：
+### 全局作用域
 
 作用域，是指变量的生命周期（一个变量在哪些范围内保持一定值）。
 
@@ -67,7 +67,7 @@ categories: JavaScript
 
 现在，变量 `result` 被挂载到 `window` 对象上了！！！
 
-### 函数作用域：
+### 函数作用域
 
 函数作用域内，对外是封闭的，从外层的作用域无法直接访问函数内部的作用域！！！
 
@@ -141,7 +141,7 @@ console.log(bar('fun'));		// "innerfun"
 
 它能够自动执行 `(function() { //... })()` 里面包裹的内容，能够很好地消除全局变量的影响；
 
-### 块级作用域：
+### 块级作用域
 
 在 ES6 之前，是没有块级作用域的概念的。如果你有 C++ 或者 Java 经验，想必你对块级作用域并不陌生；
 
@@ -262,7 +262,7 @@ for(let i = 0; i < 5; i++) {
 复制代码
 ```
 
-### 词法作用域：
+### 词法作用域
 
 词法作用域是指一个变量的可见性，及其文本表述的模拟值（《JavaScript函数式编程》）;
 
@@ -293,7 +293,7 @@ console.log(testValue);			// "outer"
 
 **当我们要使用声明的变量时：JS引擎总会从最近的一个域，向外层域查找；**
 
-![img](https://user-gold-cdn.xitu.io/2018/3/28/1626ce92a304bc47?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+* [图示](https://user-gold-cdn.xitu.io/2018/3/28/1626ce92a304bc47?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 再举一个一个实际的例子：
 
@@ -316,11 +316,11 @@ bar();
 
 **显然，当 JS 引擎查找这个变量时，发现全局的 testValue 离得更近一些，这恰好和 动态作用域 相反；**
 
-![img](https://user-gold-cdn.xitu.io/2018/3/28/1626ce99fad0f0ea?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+* [图示](https://user-gold-cdn.xitu.io/2018/3/28/1626ce99fad0f0ea?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 如上图所示，下面将讲述与 词法作用域相反的动态作用域；
 
-### 动态作用域：
+### 动态作用域
 
 在编程中，最容易被低估和滥用的概念就是动态作用域（《JavaScript函数式编程》）。
 
@@ -351,7 +351,7 @@ bar();
 
 **当然，JavaScript 除了this之外，其他，都是根据词法作用域查找！！！**
 
-![img](https://user-gold-cdn.xitu.io/2018/3/28/1626ce78d69108cb?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+* [图示](https://user-gold-cdn.xitu.io/2018/3/28/1626ce78d69108cb?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 为什么要理解动态作用域呢？因为，这能让你更好地学习 `this` 引用！！！
 
@@ -359,10 +359,8 @@ bar();
 
 关键的差异：词法作用域是编写时的，而动态作用域（和 `this`）是运行时的。词法作用域关心的是 *函数在何处被声明*，但是动态作用域关心的是函数 *从何处* 被调用。
 
-
-
-作者：leiting1998
-链接：https://juejin.im/post/5abb99e9f265da2392366824
-来源：掘金
+> 作者：leiting1998
+> 链接：https://juejin.im/post/5abb99e9f265da2392366824
+> 来源：掘金
 
  

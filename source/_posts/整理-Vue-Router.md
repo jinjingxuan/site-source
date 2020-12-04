@@ -11,11 +11,9 @@ categories: Vue
 * hash模式和history模式
 * 模拟实现 Vue Router
 
-<!--more-->
-
 ## Vue Router 使用步骤
 
-```
+```js
 ├───public
 └───src
     ├───assets
@@ -147,7 +145,7 @@ const router = new VueRouter({
 export default router
 ```
 
-```vue
+```html
 <!-- App.vue -->
 <template>
   <div id="app">
@@ -292,13 +290,11 @@ app.listen(3000, () => {
 
 * vue的构建版本 
 
-```
-运行时版：不支持 template 模板，需要打包的时候提前编译，如果你打包的时候是用vue-loader 或者 vueify，将`*.vue文件内的templates编译成JavaScript代码， 你就不需要compiler, 可以使用 runtime-only版本编译。
-
-完整版：包含运行时和编译器，体积比运行时版大10K左右，程序运行时把模板转换成render函数
-
-vue-cli默认创建运行时版
-```
+> 运行时版：不支持 template 模板，需要打包的时候提前编译，如果你打包的时候是用vue-loader 或者 vueify，将`*.vue文件内的templates编译成JavaScript代码， 你就不需要compiler, 可以使用 runtime-only版本编译。
+>
+> 完整版：包含运行时和编译器，体积比运行时版大10K左右，程序运行时把模板转换成render函数
+>
+> vue-cli默认创建运行时版
 
 * slot插槽
 
@@ -348,13 +344,11 @@ var component = new Component() // => "hello from mixin!"
 
 * render函数
 
-```
-简单的说，在vue中我们使用模板HTML语法组建页面的，使用render函数我们可以用js语言来构建DOM
-
-因为vue是虚拟DOM，所以在拿到template模板时也要转译成VNode的函数，而用render函数构建DOM，vue就免去了转译的过程。
-
-当使用render函数描述虚拟DOM时，vue提供一个函数，这个函数是就构建虚拟DOM所需要的工具。官网上给他起了个名字叫createElement。还有约定的简写叫h,
-```
+> 简单的说，在vue中我们使用模板HTML语法组建页面的，使用render函数我们可以用js语言来构建DOM
+>
+> 因为vue是虚拟DOM，所以在拿到template模板时也要转译成VNode的函数，而用render函数构建DOM，vue就免去了转译的过程。
+>
+> 当使用render函数描述虚拟DOM时，vue提供一个函数，这个函数是就构建虚拟DOM所需要的工具。官网上给他起了个名字叫createElement。还有约定的简写叫h,
 
 ```html
 <div>

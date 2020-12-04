@@ -15,7 +15,7 @@ categories: webpack
 >
 > 比如一个 css 文件没有导出，可认为有副作用
 
-```
+```js
 |--components
 		--button.js
 		--heading.js

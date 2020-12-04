@@ -12,8 +12,6 @@ categories: Vue
 * Vue初始化-静态成员
 * Vue的实例属性和方法
 
-<!--more-->
-
 ## 调试与打包
 
 * vue源码中的打包工具 Rollup
@@ -78,7 +76,7 @@ return mount.call(this, el, hydrating)
 
 源码的`src`目录下有这样的结构
 
-```
+```js
 |--core
 |--platforms
 	  |--web
