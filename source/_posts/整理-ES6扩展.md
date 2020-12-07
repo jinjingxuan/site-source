@@ -13,8 +13,6 @@ categories: ES6
 * Symbol可作为键
 * forEach、find、map、filter、reduce、every、some
 
-<!--more-->
-
 ## ES6的class
 
 ```js
@@ -132,7 +130,7 @@ a[5](); // 5
 
 2、let不存在变量提升：let不像var那样会发生变量提升，所以，变量一定要在声明后使用，否则报错。
 
-```
+```js
 console.log(i); // 输出：undefined
 console.log(j); // 报错
 var i = 5;
@@ -246,7 +244,7 @@ arr = [1,2,3,4]; // 报错
 
 转载自https://blog.csdn.net/zhouziyu2011/article/details/68067609
 
-```
+```js
 不用var，主用const，配合let
 主用const的好处是用于判断变量是否需要更改
 ```

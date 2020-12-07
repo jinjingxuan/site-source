@@ -12,8 +12,6 @@ categories: SSR
 * Nuxt.js 基础
 * Nuxt.js 综合案例 
 
-<!--more-->
-
 ## 服务端渲染基础
 
 ### 传统服务端渲染
@@ -80,7 +78,7 @@ Nuxt.js 是一个基于 Vue.js 的服务端渲染应用框架，它可以帮我�
 
 ### 创建项目
 
-```
+```js
 # 创建项目目录 
 mkdir realworld-nuxtjs 
 
