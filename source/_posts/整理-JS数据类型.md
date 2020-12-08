@@ -6,13 +6,11 @@ categories: JavaScript
 
 ## JS基本数据类型与类型转换
 
-```
+```js
 ES5基本有5种简单数据类型：String，Number，Boolean，Null，undefined。一种复杂的数据类型Object。
 ES6新增一种简单数据类型：Symbol,还有BigInt
 JS是动态类型语言，所以类型不同的时候进行运算会进行类型转换。
 ```
-
-<!--more-->
 
 ### 转字符串
 
