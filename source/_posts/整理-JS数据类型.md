@@ -64,9 +64,7 @@ Number([123，3])   //NaN
 
 有字符串时加法会把其余类型转换为字符串
 
--，*，、，%优先转数值
-
-非数值类型加法会转数值
+-，*，、，%优先转数值，+ 除外
 
 ```js
 "3"-"2"            //1
@@ -183,4 +181,51 @@ JS 中的`Number`类型只能安全地表示`-9007199254740991 (-(2^53-1))` 和
 90099999999999992n == 90099999999999993n //false
 typeof 90099999999999992n  //"bigint"
 ```
+
+## 什么情况下 a === a - 1
+
+*  正负Infinity
+* 不可被精确表示的值
+
+> 在 JavaScript 里，整数可以被精确表示的范围是从-2 ** 53 + 1到2 ** 53 - 1，即-9007199254740991到9007199254740991。超过这个数值的整数，都不能被精确表示。
+> 常量 Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER分别对应9007199254740991和-9007199254740991。
+
+```js
+let a = Number.MIN_SAFE_INTEGER - 1;
+console.log(a === a - 1); // true
+
+let a = Number.MAX_SAFE_INTEGER + 1;
+console.log(a === a - 1); // false
+
+let a = Number.MAX_SAFE_INTEGER + 2;
+console.log(a === a - 1); // false
+
+let a = Number.MAX_SAFE_INTEGER + 3;
+console.log(a === a - 1); // false
+
+let a = Number.MAX_SAFE_INTEGER + 4;
+console.log(a === a - 1); // true
+
+let a = Number.MAX_SAFE_INTEGER + 5;
+console.log(a === a - 1); // true
+```
+
+* [js的数值范围](https://www.jinjingxuan.com/2020/07/11/%E6%95%B4%E7%90%86-js%E7%9A%84%E6%95%B0%E5%80%BC%E8%8C%83%E5%9B%B4/)
+
+## 什么情况下 a==1&&a==2&&a==3为true成立
+
+```js
+const a = {
+  i: 1,
+  toString: function () {
+    return a.i++;
+  }
+}
+console.log(a == 1 && a == 2 && a == 3) // true
+
+// a是一个对象，在判断时会调用toString方法，而我们把toString方法重写了
+// 如果改成 === 则不成立，类型不同直接返回 false，不会隐式转换
+```
+
+
 
