@@ -155,6 +155,17 @@ console.log(a.call(null));
 // [object Null]
 ```
 
+### 例：判断数组
+
+```js
+const arr = [1,2,3,4]
+arr instanceof Array
+Object.prototype.toString.call(arr) === '[object Array]'
+Array.isArray(arr)
+arr.constructor === Array
+arr.__proto__ === Array.prototype
+```
+
 ## Symbol
 
 - 为什么要用Symbol？
