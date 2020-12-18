@@ -10,8 +10,6 @@ JavaScript在客户端与服务端实现的功能不同，区别具体如下：
 
 ​	在服务器端，JavaScript不依赖浏览器，而是由特定的运行环境提供的JavaScript引擎解析执行，例如Node.js，只需应用语法，不需要操作DOM和BOM。
 
-<!--more-->
-
 JavaScript包括ECMAScript,DOM,BOM三个部分，具体如下：
 
 1. ECMAScript是JavaScript的核心语法

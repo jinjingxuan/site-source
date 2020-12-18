@@ -1,7 +1,7 @@
 ---
-title: ES6扩展
+title: ES扩展
 date: 2020-11-06 09:52:01
-categories: ES6
+categories: JavaScript
 ---
 
 * ES6的class
@@ -12,6 +12,7 @@ categories: ES6
 * Set数据结构
 * Symbol可作为键
 * forEach、find、map、filter、reduce、every、some
+* ES2017
 
 ## ES6的class
 
@@ -561,3 +562,71 @@ arr.some((item,index)=>{
     return item > 4;       //true(只要有一个满足即可)
 })
 ```
+
+## ES2017
+
+* Object.values
+* Object.entries
+* Object.getOwnPropertyDescriptors
+* String.prototype.padStart
+* Sting.prototype.padEnd
+* 函数参数中添加尾逗号
+
+``` js
+const obj = {
+    foo: 'value1',
+    bar: 'value2'
+}
+
+console.log(Object.keys(obj))   // 键
+console.log(Object.values(obj)) // 值
+
+console.log(Object.entries(obj))
+// [["foo", "value1"], ["bar", "value2"]]
+
+// 可以用这种方法来遍历对象
+for(const [key, value] of Object.entries(obj)) {
+    console.log(key, value)
+}
+
+// 对象转换为Map
+new Map(Object.entries(obj))
+
+Object.getOwnPropertyDescriptors(obj)
+// 获取对象的完整描述信息
+// {foo: {…}, bar: {…}}
+
+// foo:
+// value: "value1"
+// writable: true
+// enumerable: true
+// configurable: true
+
+// bar:
+// value: "value2"
+// writable: true
+// enumerable: true
+// configurable: true
+
+//padEnd和padStart可以使输出更工整
+const books = {
+    html: 5,
+    css: 16,
+    javascript: 128
+}
+for(const [name, count] of Object.entries(books)) {
+    console.log(`${name.padEnd(16, '-')}|${count.toString().padStart(3, '0')}`)
+}
+
+// html------------|005
+// css-------------|016
+// javascript------|128
+
+// 尾逗号，方便代码管理
+const arr = [
+    100,
+    200,
+    300,
+]
+```
+
