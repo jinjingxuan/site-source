@@ -15,6 +15,8 @@ categories: Vue
 
 ## 目录结构
 
+> packages目录下有许多模块/包。Monorepo 是管理项目代码的一个方式，指在一个项目仓库 (repo) 中管理多个模块/包 (package)，不同于常见的每个模块建一个 repo。[Vue3.0 中的 monorepo 管理模式](https://juejin.cn/post/6844903961896435720)
+
 * compiler-core：平台无关的编译器
 * compiler-dom：浏览器平台下的编译器，依赖于compiler-core
 * compiler-sfc：（single file component）编译单文件组件
@@ -63,7 +65,7 @@ categories: Vue
 * 一组基于函数的 API
 * 可以更灵活的组织组件的逻辑
 
-![Composition API](https://user-images.githubusercontent.com/499550/62783026-810e6180-ba89-11e9-8774-e7771c8095d6.png)
+[Composition API图示](https://user-images.githubusercontent.com/499550/62783026-810e6180-ba89-11e9-8774-e7771c8095d6.png)
 
 ## 性能提升
 
@@ -71,7 +73,7 @@ categories: Vue
 
 * 编译优化
 
-  * Vue,js 2.x中通过标记静态根节点，优化 diff 的过程，静态节点仍需要 diff 
+  * Vue.js 2.x中通过标记静态根节点，优化 diff 的过程，静态节点仍需要 diff 
   * Vue.js 3.0中标记和提升所有的静态根节点，diff 的时候只需要对比动态节点内容
     * Fragments（升级 vetur 插件，没有根节点也不会报错，会创建一个 Fragment 片段）
     * 静态提升（再次编译可以跳过静态根节点）
@@ -79,18 +81,21 @@ categories: Vue
     * 缓存事件处理函数
   * 例子：[模板编译网址](vue-next-template-explorer.netlify.app)
 
-         ```html
-  <div id='app'>
-      <div>static root
-  		<div>static node</div>
-      </div>
-      <div>static node</div>
-      <div>static node</div>
-      <div :id="id">{{ count }}</div>
-      <button @click="handler"></button>
-  </div>
-  <!-- 删掉根节点试一下，右上角options中选择 hoistStatic 提升静态节点，找到 patch flag, 右上角可以开启缓存 -->
-         ```
+     ```html
+     <div id='app'>
+         <div>static root
+     		<div>static node</div>
+         </div>
+         <div>static node</div>
+         <div>static node</div>
+         <div :id="id">{{ count }}</div>
+         <button @click="handler"></button>
+     </div>
+     <!-- 1. 删掉根节点试一下
+          2. 右上角options中选择 hoistStatic 提升静态节点
+          3. 右侧可以找到 patch flag
+          4. 右上角options可以开启缓存 -->
+     ```
 
 * 源码体积的优化
 
@@ -99,14 +104,14 @@ categories: Vue
 
 ## Vite
 
-回顾浏览器加载模块过程:**加载模块并执行是在DOM树创建完毕之后，DOMContentLoaded之前执行**
+回顾浏览器加载模块（type=module会自动添加上defer属性）过程: **加载模块并执行是在DOM树创建完毕之后，DOMContentLoaded之前执行**
 
 ```html
 <div id="app">hello world</div>
 <script>
 	window.addEventListener('DOMContentLoaded', () => {
         console.log('DOMContentLoaded')
-    })
+  })
 </script>
 <script type="module" src="./index.js"></script>
 ```
@@ -145,7 +150,7 @@ forEach(arr, item => {
 
 ### Vite创建项目
 
-```js
+```shell
 npm init vite-app <project-name>
 cd <project-name>
 npm install
@@ -154,7 +159,7 @@ npm run dev
 
 ### 基于模板创建项目
 
-```js
+```shell
 npm init vite-app --template react
 ```
 
