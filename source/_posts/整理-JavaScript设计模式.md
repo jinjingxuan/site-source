@@ -29,7 +29,7 @@ JavaScript 设计模式，设计模式是一种思想，和语言无关。
 * 封装
 * 原型
 * class语法 
-* 具体看[面向对象编程](https://www.jinjingxuan.com/2019/01/18/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/)
+* 具体看[面向对象编程](https://www.jinjingxuan.com/2019/01/18/%E6%95%B4%E7%90%86-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/)
 
 # 设计模式
 
