@@ -67,6 +67,8 @@ categories: Vue
 
 [Composition API图示](https://user-images.githubusercontent.com/499550/62783026-810e6180-ba89-11e9-8774-e7771c8095d6.png)
 
+[Vue3为什么要使用Composition API](https://juejin.cn/post/6875253488017342478)
+
 ## 性能提升
 
 * 响应式系统升级：采用 Proxy
@@ -134,6 +136,10 @@ forEach(arr, item => {
 // Hello World
 // 1 2 3
 // DOMContentLoaded
+
+// （1）DOMContentLoaded 事件触发时，仅当DOM加载完成，不包括样式表，图片(譬如如果有async加载的脚本就不一定完成)。
+
+// （2）load 事件触发时，页面上所有的DOM，样式表，脚本，图片都已经加载完成了。
 ```
 
 ### Vite vs Vue-CLI

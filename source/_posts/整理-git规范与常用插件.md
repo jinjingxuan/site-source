@@ -101,6 +101,7 @@ git rebase -i head~3 // 合并最近三条commit
 * Vetur: 支持vue文件的语法高亮显示，除了支持template模板以外，还支持大多数主流的前端开发脚本和插件，比如Sass和TypeScript
 * vscode-icons
 * vue-helper插件：代码提示，函数跳转
+* Codelf：右键变量命名
 
 ## vue-dev-tools
 
@@ -108,7 +109,7 @@ git rebase -i head~3 // 合并最近三条commit
 
 ## Iterm2 + oh my zsh
 
-[[iTerm2 + Oh My Zsh 打造舒适终端体验](https://segmentfault.com/a/1190000014992947)](https://segmentfault.com/a/1190000014992947)
+[iTerm2 + Oh My Zsh 打造舒适终端体验](https://segmentfault.com/a/1190000014992947)
 
 
 
