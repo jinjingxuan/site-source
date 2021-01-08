@@ -1,7 +1,7 @@
 ---
 title: BFC
 date: 2018-08-03 09:21:01
-categories: BFC
+categories: CSS
 ---
 
 ## 什么是BFC
