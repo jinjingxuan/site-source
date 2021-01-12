@@ -190,3 +190,16 @@ new Date(1562169599000).toLocaleString() // "2019/7/3 下午11:59:59"
 
 * 其中的`moment`是一个时间格式化的插件
 * 可以参考：[Vue使用Moment插件格式化时间](https://blog.csdn.net/fu983531588/article/details/89330929)
+
+> 给定一个时间戳，今天的展示今天，一个月内的发布日期，展示X天前，一个月前的展示年月日，如何实现？
+
+```js
+        // 处理时间
+        transTime(time) {
+            const diff = (+new Date() - time) / 1000 / 3600 / 24
+            if (new Date(time).getDate() === new Date().getDate()) return '今天'
+            else if (diff < 30) return `${~~diff + 1}天前`
+            else return new Date(time).toLocaleString().split(' ')[0]
+        }
+```
+
