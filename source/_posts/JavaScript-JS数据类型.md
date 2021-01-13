@@ -74,6 +74,7 @@ Number([123，3])   //NaN
 123+null           //123+Number(null)
 []+{}              //两个对象相加调用toString，""+[object object] = [object object]
 {}+[]              //{}解析为代码块，+[]，优先转为数值，0
+// 至于为什么解析成了代码块，和js引擎的解析相关，在V8，Chrome的JavaScript引擎中，它检查的第一件事一开始是否是 {，如果是，则解析为block。
 [1,2]+[2,3]        //"1,22,3"
 ```
 
