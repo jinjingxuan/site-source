@@ -600,7 +600,52 @@ class Watcher {
   // 设置对象原型的函数. 返回一个 Boolean， 如果更新成功，则返回true。
   ```
 
-  
+  ### Proxy 中的 receiver
+
+> 在 Reflect.get 的场景下，receiver 可以改变计算属性中 this 的指向。
+
+```js
+var target = {
+  get a() { return this.c }
+}
+
+Reflect.get(target, 'a', { c: 4 }) // 4
+```
+
+> 如果 target 对象中设置了 getter，getter 中的 this 指向 receiver
+
+```js
+const obj = {
+  // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/get
+  // get语法将对象属性绑定到查询该属性时将被调用的函数。
+  get foo() {			
+    console.log(this)
+    return this.bar
+  }
+}
+
+const proxy = new Proxy(obj, {
+	get (target, key, receiver) {
+    if (key === 'bar') {
+      return 'value - bar'
+    }
+    return Reflect.get(target, key)
+  }
+})
+
+console.log(proxy.foo) 
+// console.log(this) => obj
+// this.bar => undefined
+
+// 若 Reflect 中加入 receiver
+return Reflect.get(target, key, receiver)
+// console.log(this) => proxy
+// this.bar => value - bar
+
+// 个人理解：执行 target[key] 是针对于 receiver 执行的
+```
+
+
 
   
 
