@@ -280,6 +280,8 @@ console.log(total)
 
 ## computed
 
+> Computed 实际上就是一个 effect 函数，computed 返回的是一个 ref 对象。
+
 ```js
 // 返回 ref 创建的对象
 export function computed (getter) {
