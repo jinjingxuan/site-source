@@ -154,10 +154,12 @@ var Child = {
 
 * $attrs ：把父组件中非 prop 属性绑定到内部组件
 * $listeners：把父组件中的 DOM 对象的原生事件绑定到内部组件
-
 * 可查看文章[Vue - 组件通信之$attrs、$listeners](https://www.cnblogs.com/chanwahfung/p/11520909.html)
+* [如何理解vue中的native](https://juejin.cn/post/6844904166167429133)
 
 ## props / $emit
+
+> 父组件通过props向子组件传递数据，子组件通过$emit触发父组件的方法，从而实现子到父的通信
 
 #### 父组件传子组件：通过props
 
@@ -274,7 +276,7 @@ export default {
 
 ## vuex
 
-[vuex](https://www.jinjingxuan.com/2020/10/22/%E6%95%B4%E7%90%86-Vuex/#more)
+[vuex](https://www.jinjingxuan.com/2020/10/22/Vue-Vuex/)
 
 ## event bus
 

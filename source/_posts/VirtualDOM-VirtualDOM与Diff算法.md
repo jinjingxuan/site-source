@@ -410,3 +410,27 @@ function createKeyToOldIdx(children, beginIdx, endIdx) {
 }
 ```
 
+## 场景：list 三条数据删除中间的那条
+
+#### index作为key，错误的删除了第三条
+
+> 至于为什么，根据 diff 算法，首先生成旧节点和新节点的虚拟 dom , 根据 key 判断是否为相同节点，再去更新内部内容，此时以 index 作为 key，算法会认为前两条key是相同的，即相同的节点，就不去更新内部了，造成的结果就是实际第二条没删除，而是删除了第三条
+
+```js
+之前的数据                         之后的数据
+
+key: 0  index: 0 name: test1     key: 0  index: 0 name: test1
+key: 1  index: 1 name: test2     key: 1  index: 1 name: test2
+key: 2  index: 2 name: test3     
+```
+
+#### id作为key
+
+```js
+之前的数据                              删除之后的数据
+
+key: 1  id: 1 index: 0 name: test1     key: 1  id: 1 index: 0  name: test1
+key: 2  id: 2 index: 1 name: test2     key: 3  id: 3 index: 3  name: test3
+key: 3  id: 3 index: 2 name: test3     
+```
+

@@ -306,7 +306,7 @@ this.$set(this.someObject,'b',2)
 
 `Object.defineProperty` 不能监听数组的一些方法，push/pop/splice等等改变原数组的方法不能触发set，需要进行数组方法的重写。（Vue3中使用proxy则不存在这些问题）
 
-```
+```js
 因为 Vue2.x 的响应式是通过 Object.defineProperty() 实现的，这个 api 没办法监听数组长度的变化，也就没办法监听数组的新增，push/pop/splice等也就不能触发set
 ```
 
@@ -386,7 +386,7 @@ if (vm.$options.el) {
 }
 ```
 
-* 一共有两个`$mount`,第一个定义在`entry-runtime-with-compiler.js`文件中,`$mount()`的核心作用是帮我们把模板编译成`render`函数，但它首先会判断一下当前是否传入了`render`选项，如果没有传入的话，它会去获取我们的`template`选项，如果`template`选项也没有的话，他会把`el`中的内容作为我们的模板，然后把模板编译成`render`函数，它是通过`compile`函数，帮我们把模板编译成`render`函数的,当把`render`函数编译好之后，它会把`render`函数存在我们的`options.render`中。
+* 一共有两个`$mount`,第一个定义在`entry-runtime-with-compiler.js`文件中,`$mount()`的核心作用是帮我们把模板编译成`render`函数，但它首先会判断一下当前是否传入了`render`选项，如果没有传入的话，它会去获取我们的`template`选项，如果`template`选项也没有的话，他会把`el`中的内容作为我们的模板，然后把模板编译成`render`函数，它是通过`compile`函数，帮我们把模板编译成`render`函数的,当把`render`函数编译好之后，它会把`render`函数存在我们的`options.render`中。（[Vue 完整版和运行时版本的区别](https://juejin.cn/post/6844904073238446093)）
 * 接着会调用`src/platforms/web/runtime/index.js`文件中的`$mount`方法,在这个中首先会重新获取`el`，因为如果是运行时版本的话，是不会走`entry-runtime-with-compiler.js`这个入口中获取el，我们会在runtime/index.js的$mount()中重新获取el。
 * 接下来调用`mountComponent()`,首先会判断`render`选项，如果没有`render`选项，但是我们传入了模板，会发送一个警告，,告诉我们如果是运行时版本不支持编译器。接下来会触发beforeMount这个生命周期中的钩子函数，也就是开始挂载之前。
 * 然后定义了updateComponent()，在这个函数中，调用`vm._render`和`vm._update`，`vm._render`的作用是生成虚拟DOM，`vm._update`的作用是将虚拟`DOM`转换成真实`DOM`，并且挂载到页面上
@@ -626,10 +626,10 @@ const obj = {
 
 const proxy = new Proxy(obj, {
 	get (target, key, receiver) {
-    if (key === 'bar') {
-      return 'value - bar'
-    }
-    return Reflect.get(target, key)
+    	if (key === 'bar') {
+      	return 'value - bar'
+    	}
+    	return Reflect.get(target, key)
   }
 })
 

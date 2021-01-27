@@ -449,6 +449,8 @@ const obj = {
 }
 ```
 
+* [对象初始化](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Object_initializer)
+
 ## object.assign
 
 ```js

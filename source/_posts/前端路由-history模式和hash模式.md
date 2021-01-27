@@ -126,7 +126,7 @@ history.pushState(stateObj,'page 2','2.html')
 
 如果pushState的url参数，设置了一个新的锚点值（即hash），并不会触发hashChange事件，如果设置了一个跨域网址，则会报错。
 
-```
+```js
 //报错
 history.pushState(null,null,'https://twitter.com/hello')
 ```
@@ -305,6 +305,4 @@ computed: {
     },
 </script>
 ```
-
-## 
 
