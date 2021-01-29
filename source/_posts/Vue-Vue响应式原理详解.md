@@ -96,6 +96,8 @@ created: function () {
     em.$emit('click')
 ```
 
+[Object.create(null) 和 {} 的区别](https://juejin.cn/post/6844903589815517192)
+
 ### 观察者模式
 
 * 观察者  -- watcher
