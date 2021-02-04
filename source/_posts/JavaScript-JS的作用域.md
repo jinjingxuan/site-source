@@ -4,6 +4,13 @@ date: 2018-11-01 10:00:54
 categories: JavaScript
 ---
 
+* 全局作用域
+* 函数作用域
+* 块级作用域
+* 词法作用域
+* 动态作用域
+* 面试题
+
 ### 全局作用域
 
 作用域，是指变量的生命周期（一个变量在哪些范围内保持一定值）。
@@ -17,8 +24,6 @@ categories: JavaScript
 > 在 JavaScript 内默认是可以被修改的。
 
 全局变量，虽然好用，但是是非常可怕的，这是所有程序员公认的事实。
-
-<!--more-->
 
 ##### 显式声明：
 
@@ -363,4 +368,22 @@ bar();
 > 链接：https://juejin.im/post/5abb99e9f265da2392366824
 > 来源：掘金
 
- 
+## 面试题
+
+ ```js
+var x = 10;
+
+function fn(){
+    console.log(x);
+}
+
+function show(f){
+    var x = 20;
+    (function(){
+       f(); 
+    })()  
+}
+
+show(fn); // 10，词法作用域
+ ```
+

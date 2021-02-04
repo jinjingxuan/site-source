@@ -8,9 +8,8 @@ categories: JavaScript
 * Generator
 * async和await
 * 宏任务，微任务，事件循环
-* 手写promise，promise.all，promise.race
-
-<!--more-->
+* 面试题精选
+* 浏览器与node的事件循环
 
 ## promise
 
@@ -60,52 +59,6 @@ new Promise(function(resolve,reject){
 }).then(function(data){
     console.log(data)
 })
-
-//现在有work1 ~ work4四个方法,怎么实现顺序执行
-function work1(){
-    console.log("work1")
-    return new Promise(function(res,rej){
-        res()
-    })
-}
-function work2(){
-	console.log("work2")
-    return new Promise(function(res,rej){
-        res()
-    })
-}
-function work3(){
-    console.log("work3")
-    return new Promise(function(res,rej){
-        res()
-    })
-}
-function work4(){
-    console.log("work4")
-    return new Promise(function(res,rej){
-        res()
-    })
-}
-
-new Promise(function(resolve,reject){
-        resolve()
-    }).then(()=>work1())    //.then里面放的是函数，会执行
-      .then(()=>work2())
-      .then(()=>work3())
-      .then(()=>work4())
-      .finally(()=>{
-        console.log("work done!")
-})
-
-Promise.all([work1(),work2(),work3()]).then(()=>{
-    console.log("work1,work2,work3")
-})//所有操作全完成之后的操作
-
-Promise.race([work1(),work2(),work3()]).then(()=>{
-    console.log("有就行")
-})//有一个成功就行
-
-
 ```
 
 ```js
@@ -203,15 +156,6 @@ function fetchUser(){
 
 ## 宏任务，微任务，事件循环
 
-- JS 任务分为同步任务和异步任务；
-- 同步任务都在主线程上执行，形成一个执行栈；
-- 主线程之外，事件触发线程管理着一个任务队列，只要异步任务有了结果，就在任务队列里面放置一个事件
-- 一旦执行栈中所有同步任务执行完毕（JS 引擎空闲之后），就会去读取任务队列，将可运行的异步任务添加到可执行栈里面，开始执行。
-
-> 任务有同步任务、异步任务，ES5中这么分足够了
->
-> 由于ES6有promise，就任务又分为**宏任务（macro-task）**和**微任务（micro-task）** 
-
  **宏任务(macrotask)：**：
 
 script(整体代码)、setTimeout、setInterval、UI 渲染、 I/O、postMessage、 MessageChannel、setImmediate(Node.js 环境)
@@ -226,6 +170,9 @@ Promise、 MutaionObserver、process.nextTick(Node.js环境
 - 检查是否存在 Microtask，如果存在则不停的执行，直至清空 microtask 队列
 - 更新render(每一次事件循环，浏览器都可能会去更新渲染)
 - 重复以上步骤
+- [图示](http://lynnelv.github.io/img/article/event-loop/ma(i)crotask.png)
+
+## 面试题精选
 
 ```js
 console.log('script start');
@@ -325,7 +272,7 @@ function ajax (url) {
             if(this.status === 200) {
                 reslove(this.response)
             } else {
-                reject(new Errpr(this.statusText))
+                reject(new Error(this.statusText))
             }
         }
         xhr.send()
@@ -338,11 +285,10 @@ ajax('/api/')
 
 
 //promise.reslove
-
 Promise.resolve('foo')
     .then(function (value) {
- 	   console.log(value)
-	})
+ 	   		console.log(value)
+		})
 ```
 
 ## Promise静态方法
@@ -452,55 +398,57 @@ promise.then(value => {
 ## promise.all
 
 ```js
-		Promise.all = function(promises){
-            return new Promise((resolve,reject)=>{
-                let result = []
-                let len = promises.length
-                let index = 0
-                if(len==0){
+Promise.all = function(promises) {
+    return new Promise((resolve, reject) => {
+        let result = []
+        let len = promises.length
+        let index = 0
+        if (len === 0) {
+            resolve (result)
+        }
+        for (let i = 0; i < len; i++) {
+            Promise.resolve(promises[i]).then((res) => {
+                result[i] = res
+                index++
+                if (index === len) {
                     resolve(result)
+                    return
                 }
-                for(let i=0;i<len;i++){
-                    Promise.resolve(promise[i]).then((res)=>{
-                        result[i] = res
-                        index++
-                        if(index==len){
-                            resolve(result)
-                            return
-                        }
-                    }).catch((err)=>{
-                        reject(err)
-                    })
-                }
+            }).catch((err) => {
+                reject(err)
             })
         }
+    })
+}
 ```
+
+**如何实现Promise.all并且把失败的结果保存起来，不是失败立即执行reject？**：再加一个 result 数组就好
 
 ## promise.race
 
 ```js
-		Promise.race = function(promises){
-            return new Promise((resolve,reject)=>{
-                let len = promises.length
-                if(len==0) return
-                for(let i=0;i<len;i++){
-                    Promise.resolve(promises[i]).then(res=>{
-                        resolve(res)
-                        return
-                    }).catch((err)=>{
-                        reject(err)
-                        return 
-                    })
-                }
+Promise.race = function(promises) {
+    return new Promise((resolve, reject) => {
+        let len = promises.length
+        if (len === 0) return
+        for (let i = 0; i < len; i++) {
+            Promise.resolve(promises[i]).then(res => {
+                resolve(res)
+                return
+            }).catch(err => {
+                reject(err)
+                return
             })
         }
+    })
+}
 ```
 
 ## promise.resolve
 
 ```js
 Promise.resolve = function (value) {
-    if (value instaceif promise) return value
+    if (value instanceof promise) return value
     return new Promise(resolve => resolve(value))
 }
 
@@ -508,7 +456,7 @@ Promise.resolve = function (value) {
 Promise.resolve(100).then(value => console.log(value))
 ```
 
-## 一道习题
+## 看代码说答案
 
 ```js
 // 原代码
@@ -611,3 +559,161 @@ Promise.resolve().then(res => {
 })
 // 1 2  3 4 newPromise1
 ```
+
+```js
+const promise = new Promise((resolve, reject) => {
+    console.log(1);
+    resolve();
+    console.log(2);
+    reject('error');
+})
+promise.then(() => {
+    console.log(3);
+}).catch(e => console.log(e))
+console.log(4);
+
+// 1 2 4 3
+// promise构造函数的代码会立即执行，then或者reject里面的代码会放入异步微任务队列，在宏任务结束后会立即执行。规则二：promise的状态一旦变更为成功或者失败，则不会再次改变，所以执行结果为：1,2,4,3。而catch里面的函数不会再执行。
+```
+
+```js
+const promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+             console.log('once')
+             resolve('success')
+        }, 1000)
+ })
+promise.then((res) => {
+       console.log(res)
+})
+promise.then((res) => {
+     console.log(res)
+})
+// 将过一秒打印:once,success,success
+```
+
+```js
+const p1 = () => (new Promise((resolve, reject) => {
+	 	console.log(1);
+ 		let p2 = new Promise((resolve, reject) => {
+        console.log(2);
+        const timeOut1 = setTimeout(() => { // timeout1 加入宏任务队列
+          console.log(3);
+          resolve(4);
+        }, 0)
+        resolve(5); // p2.then加入微任务队列
+ 		});
+		resolve(6); // p1.then加入微任务队列
+    p2.then((arg) => {
+  			console.log(arg);
+ 		});
+}));
+
+const timeOut2 = setTimeout(() => { // timeout2 加入宏任务队列
+ 		console.log(8);
+ 		const p3 = new Promise(reject => {
+  		reject(9);
+ 		}).then(res => {
+  		console.log(res)
+ 		})
+}, 0)
+
+
+p1().then((arg) => {
+ 		console.log(arg);
+});
+
+console.log(10);
+
+// 1,2,10,5,6,8,9,3
+```
+
+> 首先执行 script 代码块，我们来分析一下都做了什么：
+> 1. 定义了 p1 函数，定义的时候p1没有执行，所以这时候内部实现先不看
+> 2. 执行了 timeout2 函数，返回值（是一个数值）赋值给 timeout2，timeout2加入了宏任务队列
+> 3. 执行 p1，定义即执行的有输出 1，2，p2.then，p1.then加入微任务队列，timeout1加入宏任务队列
+> 4. 输出10，执行完 script 宏任务后，清空微任务队列，p2.then => 5，p1.then => 6
+> 5. 找出宏任务，首先执行 timeout2，输出 8 , reject 只是形参起名字实际上还是 resolve，p3.then加入微队列
+> 6. Timeout2 宏任务执行结束清空微任务队列，输出9，然后再执行宏任务 timeout1,输出3，此时resolve(4)不会执行，因为p2状态已经成为 fullfilled
+
+```js
+Promise.resolve(1)
+.then(2)
+.then(Promise.resolve(3))
+.then(console.log)
+
+// Promise.resolve(1)会返回一个promise对象并且会将1当做then的参数。而.then 或者 .catch 的参数期望是函数，传入非函数则会发生值穿透。所以最后会输出：1。
+```
+
+```js
+Promise.resolve(1)
+.then((x)=> x + 1)
+.then((x)=> { throw new Error('My Error') })
+.catch(()=>1)
+.then((x)=>x + 1)
+.then((x)=>console.log(x))
+.catch(console.error)
+
+// 因为then()和catch()又返回了一个promise，因此，后续调用可以串联起来。
+// catch 其实是 then(undefined, () => {}) 的语法糖，如下：
+p.catch(err => {
+  console.log("catch " + err); // catch error
+});
+
+// 等同于
+p.then(undefined, err => {
+  console.log("catch " + err); // catch error
+});
+```
+
+## 浏览器事件循环和node事件循环的区别
+
+Node的事件循环是libuv实现的，大体的task（宏任务）执行顺序是这样的：[图示](http://lynnelv.github.io/img/article/event-loop/ma(i)crotask-in-node.png)
+
+- timers定时器：本阶段执行已经安排的 setTimeout() 和 setInterval() 的回调函数。
+- pending callbacks待定回调：执行延迟到下一个循环迭代的 I/O 回调。
+- idle, prepare：仅系统内部使用。
+- poll 轮询：检索新的 I/O 事件;执行与 I/O 相关的回调（几乎所有情况下，除了关闭的回调函数，它们由计时器和 setImmediate() 排定的之外），其余情况 node 将在此处阻塞。
+- check 检测：setImmediate() 回调函数在这里执行。
+- close callbacks 关闭的回调函数：一些准备关闭的回调函数，如：socket.on('close', ...)。
+
+****
+
+- Node10以前，`microtask` 在事件循环的各个阶段之间执行，Node11之后和浏览器行为统一了，都是每执行一个宏任务就把微任务队列清空。
+- 浏览器端，`microtask` 在事件循环的 `macrotask` 执行完之后执行
+
+```js
+function test () {
+   console.log('start')
+    setTimeout(() => {
+        console.log('children2')
+        Promise.resolve().then(() => {console.log('children2-1')})
+    }, 0)
+    setTimeout(() => {
+        console.log('children3')
+        Promise.resolve().then(() => {console.log('children3-1')})
+    }, 0)
+    Promise.resolve().then(() => {console.log('children1')})
+    console.log('end')
+}
+
+test()
+
+// 浏览器端 和 node11之后
+// start
+// end
+// children1
+// children2
+// children2-1
+// children3
+// children3-1
+
+// node10之前
+// start
+// end
+// children2
+// children3
+// children2-1
+// children3-1
+```
+

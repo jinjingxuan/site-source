@@ -168,24 +168,24 @@ new Date(1562169599000).toLocaleString() // "2019/7/3 下午11:59:59"
 * 但是如果组件是精确到秒的话直接用`getTime`就行了
 
 ```js
-		disposeTime(start, end) {
-            let startDate, endDate
-            if (start.getTime) {
-                startDate = start.getTime()
-            } else {
-                startDate = moment(start).valueOf()
-            }
-            if (end.getTime) {
-                endDate = end.getTime()
-            } else {
-                endDate = moment(end).valueOf()
-            }
-            endDate += 24 * 60 * 60 * 1000 - 1;
-            return {
-                startDate,
-                endDate
-            }
-        },
+disposeTime(start, end) {
+  let startDate, endDate
+  if (start.getTime) {
+    startDate = start.getTime()
+  } else {
+    startDate = moment(start).valueOf()
+  }
+  if (end.getTime) {
+    endDate = end.getTime()
+  } else {
+    endDate = moment(end).valueOf()
+  }
+  endDate += 24 * 60 * 60 * 1000 - 1;
+  return {
+    startDate,
+    endDate
+  }
+},
 ```
 
 * 其中的`moment`是一个时间格式化的插件
@@ -194,12 +194,12 @@ new Date(1562169599000).toLocaleString() // "2019/7/3 下午11:59:59"
 > 给定一个时间戳，今天的展示今天，一个月内的发布日期，展示X天前，一个月前的展示年月日，如何实现？
 
 ```js
-        // 处理时间
-        transTime(time) {
-            const diff = (+new Date() - time) / 1000 / 3600 / 24
-            if (new Date(time).getDate() === new Date().getDate()) return '今天'
-            else if (diff < 30) return `${~~diff + 1}天前`
-            else return new Date(time).toLocaleString().split(' ')[0]
-        }
+// 处理时间
+transTime(time) {
+  const diff = (+new Date() - time) / 1000 / 3600 / 24
+  if (new Date(time).getDate() === new Date().getDate()) return '今天'
+  else if (diff < 30) return `${~~diff + 1}天前`
+  else return new Date(time).toLocaleString().split(' ')[0]
+}
 ```
 

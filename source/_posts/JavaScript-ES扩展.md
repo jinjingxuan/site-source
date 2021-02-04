@@ -13,8 +13,9 @@ categories: JavaScript
 * Symbol可作为键
 * forEach、find、map、filter、reduce、every、some
 * ES2017
+* Array.from
 
-## ES6的class
+## class
 
 ```js
 class Person{//定义了一个名字为Person的类
@@ -70,7 +71,7 @@ console.log(box1.__proto__===box2.__proto__);//true
 //由此，也可以通过proto来为类增加方法。使用实例的proto属性改写原型，会改变Class的原始定义，影响到所有实例，所以不推荐使用！
 ```
 
-## ES6的继承
+## 继承
 
 ```js
 class b extends a{
@@ -99,7 +100,7 @@ Class 作为构造函数的语法糖，同时有prototype属性和__proto__属�
 
 ES5只有两种声明变量的方式：var和function，ES6还添加了两种常用的声明变量的方式：let和const。
 
-## ES6的let命令：
+## let命令
 
 ES6新增了let命令，用来声明变量，它的用法类似于var，但是所声明的变量，只在let命令所在的代码块内有效。
 
@@ -196,7 +197,7 @@ function func(arg) { // 不报错
 }
 ```
 
-## ES6的const命令
+## const命令
 
 const声明一个只读的常量，一旦声明，常量的值就不能改变，这意味着，const一旦声明常量，就必须立即初始化，不能等到之后再赋值。因此，改变常量和只声明不赋初始值都会报错。
 
@@ -419,7 +420,7 @@ ES6提供了Array.includes()函数判断是否包含某一元素，除了不能�
 [1, 2, 3].includes(3, -1); // true
 ```
 
-## 带标签的模板字符串
+## 模板字符串
 
 ```js
 // 模板字符串前面可以添加标签
@@ -476,6 +477,23 @@ NaN === NaN // false
 object.is(+0, -0) //false
 Object.is(NaN, NaN) // true
 ```
+
+`Object.is()` 方法判断两个值是否为[同一个值](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Equality_comparisons_and_sameness)。如果满足以下条件则两个值相等:
+
+- 都是 [`undefined`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined)
+- 都是 [`null`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/null)
+- 都是 `true` 或 `false`
+- 都是相同长度的字符串且相同字符按相同顺序排列
+- 都是相同对象（意味着每个对象有同一个引用）
+- 都是数字且
+  - 都是 `+0`
+  - 都是 `-0`
+  - 都是 [`NaN`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/NaN)
+  - 或都是非零而且非 [`NaN`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/NaN) 且为同一个值
+
+与[`==`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Equality) 运算*不同。* `==` 运算符在判断相等前对两边的变量(如果它们不是同一类型) 进行强制转换 (这种行为的结果会将 `"" == false` 判断为 `true`), 而 `Object.is`不会强制转换两边的值。
+
+与[`===`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Identity) 运算也不相同。 `===` 运算符 (也包括 `==` 运算符) 将数字 `-0` 和 `+0` 视为相等 ，而将[`Number.NaN`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/NaN) 与[`NaN`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/NaN)视为不相等.
 
 ## Set数据结构
 
@@ -630,5 +648,90 @@ const arr = [
     200,
     300,
 ]
+```
+
+## Array.from
+
+**将一个类数组对象或者可遍历对象转换成一个真正的数组。**
+
+- 该类数组对象必须具有length属性，用于指定数组的长度。如果没有length属性，那么转换后的数组是一个空数组。
+- 该类数组对象的属性名必须为数值型或字符串型的数字
+- 该类数组对象的属性名可以加引号，也可以不加引号
+- `Array.from`可以接受第二个参数，作用类似于数组的`map`方法，用来对每个元素进行处理，将处理后的值放入返回的数组。
+
+### 从 `String` 生成数组
+
+```js
+Array.from('foo');
+// [ "f", "o", "o" ], 可以代替 split
+```
+
+### 从 `Set` 生成数组
+
+```js
+const set = new Set(['foo', 'bar', 'baz', 'foo']);
+Array.from(set);
+// [ "foo", "bar", "baz" ]
+```
+
+### 从 `Map` 生成数组
+
+```js
+const map = new Map([[1, 2], [2, 4], [4, 8]]);
+Array.from(map);
+// [[1, 2], [2, 4], [4, 8]]
+
+const mapper = new Map([['1', 'a'], ['2', 'b']]);
+Array.from(mapper.values());
+// ['a', 'b'];
+
+Array.from(mapper.keys());
+// ['1', '2'];
+```
+
+### 从类数组对象（arguments）生成数组
+
+```js
+function f() {
+  return Array.from(arguments);
+}
+
+f(1, 2, 3);
+
+// [ 1, 2, 3 ]
+```
+
+### 在 `Array.from` 中使用箭头函数
+
+```js
+// Using an arrow function as the map function to
+// manipulate the elements
+Array.from([1, 2, 3], x => x + x);
+// [2, 4, 6]
+
+
+// Generate a sequence of numbers
+// Since the array is initialized with `undefined` on each position,
+// the value of `v` below will be `undefined`
+Array.from({length: 5}, (v, i) => i);
+// [0, 1, 2, 3, 4]
+```
+
+### 初始化二维数组
+
+```js
+Array.from(new Array(m),()=>(new Array(n).fill(0)))
+```
+
+## Array.of
+
+`Array.of()` 方法创建一个具有可变数量参数的新数组实例，而不考虑参数的数量或类型。
+
+```js
+Array.of(7);       // [7]
+Array.of(1, 2, 3); // [1, 2, 3]
+
+Array(7);          // [ , , , , , , ]
+Array(1, 2, 3);    // [1, 2, 3]
 ```
 

@@ -122,7 +122,7 @@ console.log('str' instanceof String);                // false
 console.log([] instanceof Array);                    // true
 console.log(function(){} instanceof Function);       // true
 console.log({} instanceof Object);                   // true  
-//问题：字面值被实例化才可
+//问题：字面值被实例化才可，因为字面值不存在__proto__
 console.log(new Number(2) instanceof Number);                    // true
 console.log(new Boolean(true) instanceof Boolean);                // true 
 console.log(new String('str') instanceof String);                // true  

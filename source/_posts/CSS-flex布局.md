@@ -13,9 +13,60 @@ categories: CSS
 ****
 
 * [Flex 布局教程：语法篇](http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html)
-
 * [flex:1详解](https://blog.csdn.net/qq_40138556/article/details/103967529)
 * [重点看这篇文章](https://blog.csdn.net/u012260238/article/details/86656175)
+
+```css
+.item {flex: none;}
+.item {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+```
+
+```css
+.item {flex: auto;}
+.item {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+}
+```
+
+```css
+.item {flex: 1;}
+.item {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+}
+```
+
+```css
+.item-1 {flex: 0%;}
+.item-1 {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+}
+
+.item-2 {flex: 24px;}
+.item-1 {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 24px;
+}
+```
+
+```css
+.item {flex: 2 3;}
+.item {
+    flex-grow: 2;
+    flex-shrink: 3;
+    flex-basis: 0%;
+}
+```
 
 ```js
 flex-basis 规定的是子元素的基准值。所以是否溢出的计算与此属性息息相关。flex-basis 规定的范围取决于 box-sizing。这里主要讨论以下 flex-basis 的取值情况：
