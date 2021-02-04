@@ -341,19 +341,22 @@ class MyPromise {
   value = undefined
   // 失败后的原因
   reason = undefined
-  // 成功回调
-  successCallback = undefined
+  // 成功回调，用数组的原因是可能有多个 promise.then
+  successCallback = []
   // 失败回调
-  failCallback = undefined
+  failCallback = []
+  // 定义成箭头函数的好处是 this 指向当前类
   resolve = value => {
-    // 如果状态不是等待 阻止程序向下执行
+    // 如果状态不是等待 阻止程序向下执行 因为状态一旦确定就不可以再改变
     if (this.status !== PENDING) return
     // 将状态更改为成功
     this.status = FULFILLED
     // 保存成功之后的值
     this.value = value
     // 判断成功回调是否存在 存在则调用
-    this.successCallback && successCallback(this.value)
+    while (this.successCallback.length) {
+     	this.successCallback.shift()(this.value)  
+    }
   }
   reject = reason => {
     // 如果状态不是等待 阻止程序向下执行
@@ -363,7 +366,9 @@ class MyPromise {
     // 保存失败后的原因
     this.reason = reason
     // 判断失败回调是否存在 存在则调用
-    this.failCallback && failCallback(this.reason)
+    while (this.failCallback.length) {
+     	this.failCallback.shift()(this.reason)  
+    }
   }
   then (successCallback, failCallback) {
     // 判断状态
@@ -374,8 +379,8 @@ class MyPromise {
     } else {
         // 等待
         // 将成功回调和失败回调存储起来
-        this.successCallback = successCallback
-        this.failCallback = failCallback
+        this.successCallback.push(successCallback)
+        this.failCallback.push(failCallback)
     }
   }
 }
