@@ -326,6 +326,11 @@ promise.then(values => console.log(values)) // 输出数组，保存每一个请
 
 ## 手写Promise基础版
 
+* 三种状态：pending，fulfilled，rejected
+* new Promise 时传进来一个执行器（参数是resolve和reject），是立即执行的
+* resolve的作用是改变状态为fulfilled，并且执行成功回调
+* reject的作用的改变状态为rejected，并且执行失败回调
+
 ```js
 const PENDING = 'pending' // 等待
 const FULFILLED = 'fulfilled' // 成功
@@ -377,7 +382,7 @@ class MyPromise {
     } else if (this.status === REJECTED) {
       failCallback()
     } else {
-        // 等待
+        // 等待状态，处理异步，比如等2秒再 resolve
         // 将成功回调和失败回调存储起来
         this.successCallback.push(successCallback)
         this.failCallback.push(failCallback)
