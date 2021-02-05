@@ -78,6 +78,24 @@ function cooking(){
 dianwaimai().then(res=>console.log(res)).catch(res=>console.log(res))
 ```
 
+### Promise静态方法
+
+* Promise.reslove
+* Promise.reject
+
+**这两种方法均会创建Promise对象**
+
+```js
+Promise.resolve('foo')
+	.then( value => console.log(value) )
+// foo
+
+Promise.reject(new Error('rejected'))
+	.catch(err => console.log(err))
+// Error: rejected
+//    at <anonymous>:1:16
+```
+
 ## Generator
 
 - Generator 的中文名称是生成器，
@@ -260,213 +278,17 @@ Promise.resolve(1).then(2).then(Promise.resolve(3)).then(console.log) // 1
 // console.log 是函数
 ```
 
-## Promise 方式的 AJAX
+### 手写代码
 
-```js
-function ajax (url) {
-    return new Promise(function (reslove, reject) {
-        var xhr = new XMLHttpRequest()
-        xhr.open('GET', url) 
-        xhr.reponeseType = 'json'
-        xhr.onload = function () {
-            if(this.status === 200) {
-                reslove(this.response)
-            } else {
-                reject(new Error(this.statusText))
-            }
-        }
-        xhr.send()
-    })
-}
+* Promise
+* promise.all
+* promise.race
+* promise.resolve
+* Promise 封装 AJAX
 
-ajax('/api/')
-	.then(res => console.log(res))
-	.catch(err => console.log(err))
+* [手写代码整理](https://jinjingxuan.github.io/2020/03/20/%E9%9D%A2%E8%AF%95-%E6%89%8B%E5%86%99%E4%BB%A3%E7%A0%81%E6%95%B4%E7%90%86/)
 
-
-//promise.reslove
-Promise.resolve('foo')
-    .then(function (value) {
- 	   		console.log(value)
-		})
-```
-
-## Promise静态方法
-
-* Promise.reslove
-* Promise.reject
-
-**这两种方法均会创建Promise对象**
-
-```js
-Promise.resolve('foo')
-	.then( value => console.log(value) )
-// foo
-
-Promise.reject(new Error('rejected'))
-	.catch(err => console.log(err))
-// Error: rejected
-//    at <anonymous>:1:16
-```
-
-## Promise并行执行
-
-如果有多个请求接口的操作，如何判断全部执行完毕？`Promise.all`
-
-```js
-// 多个Promise对象组合成一个Promise对象
-let promise = Promise.all([ //参数为数组
-    // 请求1 必须为promise对象
-    // 请求2
-])
-
-promise.then(values => console.log(values)) // 输出数组，保存每一个请求的结果
-	   .catch(err => console.log(err))
-```
-
-## 手写Promise基础版
-
-* 三种状态：pending，fulfilled，rejected
-* new Promise 时传进来一个执行器（参数是resolve和reject），是立即执行的
-* resolve的作用是改变状态为fulfilled，并且执行成功回调
-* reject的作用的改变状态为rejected，并且执行失败回调
-
-```js
-const PENDING = 'pending' // 等待
-const FULFILLED = 'fulfilled' // 成功
-const REJECTED = 'rejected' //失败
-
-class MyPromise {
-  constructor (executor) {
-    executor(this.resolve, this.reject)
-  }
-  // promise 状态
-  status = PENDING
-  // 成功之后的值
-  value = undefined
-  // 失败后的原因
-  reason = undefined
-  // 成功回调，用数组的原因是可能有多个 promise.then
-  successCallback = []
-  // 失败回调
-  failCallback = []
-  // 定义成箭头函数的好处是 this 指向当前类
-  resolve = value => {
-    // 如果状态不是等待 阻止程序向下执行 因为状态一旦确定就不可以再改变
-    if (this.status !== PENDING) return
-    // 将状态更改为成功
-    this.status = FULFILLED
-    // 保存成功之后的值
-    this.value = value
-    // 判断成功回调是否存在 存在则调用
-    while (this.successCallback.length) {
-     	this.successCallback.shift()(this.value)  
-    }
-  }
-  reject = reason => {
-    // 如果状态不是等待 阻止程序向下执行
-    if (this.status !== PENDING) return
-    // 将状态更改为失败
-    this.status = REJECTED
-    // 保存失败后的原因
-    this.reason = reason
-    // 判断失败回调是否存在 存在则调用
-    while (this.failCallback.length) {
-     	this.failCallback.shift()(this.reason)  
-    }
-  }
-  then (successCallback, failCallback) {
-    // 判断状态
-    if (this.status === FULFILLED) {
-      successCallback()
-    } else if (this.status === REJECTED) {
-      failCallback()
-    } else {
-        // 等待状态，处理异步，比如等2秒再 resolve
-        // 将成功回调和失败回调存储起来
-        this.successCallback.push(successCallback)
-        this.failCallback.push(failCallback)
-    }
-  }
-}
-
-// 测试 
-let promise = new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-        resolve('成功')
-    }, 2000)
-    resolve('成功')
-    // reject('失败')
-})
-promise.then(value => {
-    console.log(value)
-}, reason => {
-    console.log(reason)
-})
-```
-
-## promise.all
-
-```js
-Promise.all = function(promises) {
-    return new Promise((resolve, reject) => {
-        let result = []
-        let len = promises.length
-        let index = 0
-        if (len === 0) {
-            resolve (result)
-        }
-        for (let i = 0; i < len; i++) {
-            Promise.resolve(promises[i]).then((res) => {
-                result[i] = res
-                index++
-                if (index === len) {
-                    resolve(result)
-                    return
-                }
-            }).catch((err) => {
-                reject(err)
-            })
-        }
-    })
-}
-```
-
-**如何实现Promise.all并且把失败的结果保存起来，不是失败立即执行reject？**：再加一个 result 数组就好
-
-## promise.race
-
-```js
-Promise.race = function(promises) {
-    return new Promise((resolve, reject) => {
-        let len = promises.length
-        if (len === 0) return
-        for (let i = 0; i < len; i++) {
-            Promise.resolve(promises[i]).then(res => {
-                resolve(res)
-                return
-            }).catch(err => {
-                reject(err)
-                return
-            })
-        }
-    })
-}
-```
-
-## promise.resolve
-
-```js
-Promise.resolve = function (value) {
-    if (value instanceof promise) return value
-    return new Promise(resolve => resolve(value))
-}
-
-// 例子
-Promise.resolve(100).then(value => console.log(value))
-```
-
-## 看代码说答案
+### 看代码说答案
 
 ```js
 // 原代码
