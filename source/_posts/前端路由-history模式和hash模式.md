@@ -173,6 +173,10 @@ window.addEventListener('popstate', function(event) {
 
 回调函数的参数是一个event事件对象，它的state属性指向pushState和replaceState方法为当前url所提供的状态对象（即这两个方法的第一个参数）。上边代码中的event.state就是通过pushState和replaceState方法为当前url绑定的state对象
 
+那既然调用pushState方法或replaceState方法，并不会触发popState事件，要怎么处理呢？
+
+> **解决思路：**我们可以通过遍历页面上的所有 `a` 标签，阻止 `a` 标签的默认事件的同时，加上点击事件的回调函数，在回调函数内获取 `a` 标签的 `href` 属性值，再通过 `pushState`去改变浏览器的 `location.pathname` 属性值。然后手动执行 `popstate` 事件的回调函数，去匹配相应的路由。
+
 ```html
 <!-- popstate 和点击事件 触发页面改变 -->
 	<ul>
@@ -190,8 +194,7 @@ window.addEventListener('popstate', function(event) {
 
     <script>
       var view = null;
-      // 页面加载完不会触发 hashchange
-      // 这里主动触发一次 hashchange 事件,该事件快于onLoad,所以需要在这里操作
+      
       window.addEventListener('DOMContentLoaded', function () {
         view = document.querySelector('#view');
         document
@@ -291,10 +294,10 @@ const routes = [
 
 * 比如说 header 中的一个组件，不同路由页面均展示，只是状态不同
 
-```vue
+```html
 <template>
     <div v-if="!cityDefault"></div>
-	<div v-else ></div>
+	  <div v-else ></div>
 </template>	
 	
 <script>

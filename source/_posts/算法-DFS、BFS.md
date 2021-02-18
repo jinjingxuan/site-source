@@ -9,6 +9,7 @@ categories: 算法
 * 求根到叶子节点数字之和（DFS）
 * 单词接龙（BFS）
 * N叉树的最大深度（BFS）
+* 打家劫舍三（DFS）
 
 ## 深度优先，广度优先（层次遍历）
 
@@ -238,5 +239,34 @@ var maxDepth = function(root) {
     }
     return num + 1
 };
+```
+
+## 打家劫舍iii（DFS）
+
+* [Leetcode337](https://leetcode-cn.com/problems/house-robber-iii/)
+* 每个节点都设置：**[不偷, 偷]**
+* 当前节点被偷时，其左右孩子不能偷
+* 当前节点未被偷时，其左右孩子可以偷，也可以不偷，取 **[不偷, 偷]** 的较大者
+
+```js
+var rob = function(root) {
+    let res = dfs(root);
+    return Math.max(res[0], res[1]);
+};
+
+function dfs(root) {
+    // [不偷, 偷]
+    let res = [0,0];
+    if (root === null) return res;
+    // left 为 root 左侧子节点的[不偷值, 偷值]
+    let left = dfs(root.left); 
+  	// right 为 root 右侧子节点的[不偷值, 偷值]
+    let right = dfs(root.right); 
+    // 每一个节点的不偷值都是： 左侧子节点的最大值 + 右侧子节点的最大值
+    res[0] = Math.max(...left) + Math.max(...right);
+    // 每一个节点的偷值都是：左侧子节点的不偷值 + 右侧子节点的不偷值 + 该节点的值
+    res[1] = root.val + left[0] + right[0];
+    return res;
+}
 ```
 

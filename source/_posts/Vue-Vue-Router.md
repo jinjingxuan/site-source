@@ -83,7 +83,7 @@ new Vue({
 }).$mount('#app')
 ```
 
-```vue
+```html
 <!-- App.vue -->
 <template>
   <div id="app">
