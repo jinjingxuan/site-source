@@ -164,7 +164,7 @@ const arr = [1,2,3,4]
 arr instanceof Array
 Object.prototype.toString.call(arr) === '[object Array]'
 Array.isArray(arr)
-arr.constructor === Array
+arr.__proto__.constructor === Array
 arr.__proto__ === Array.prototype
 ```
 

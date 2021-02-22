@@ -87,6 +87,8 @@ class b extends a{
 //`super()`相当于`a.prototype.constructor.call(this)`
 ```
 
+* super完成了调用父类构造函数，extends实现了原型链的继承，本质上和ES5是一样的
+
 ### 继承的时候extends干了什么
 
 **extends在实现继承方面，本质上也是原型链继承,该方法实现了两步原型链继承**
