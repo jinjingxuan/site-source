@@ -6,79 +6,57 @@ categories: JavaScript
 
 ## 闭包的定义
 
-- 犀牛书：函数体内部的变量都可以保存在函数作用域内，这种特性称为闭包。
-- W3C和菜鸟教程：JavaScript 变量可以是局部变量或全局变量。私有变量可以用到闭包。
-- 转载的这篇博客：闭包是指有权访问另一个函数作用域中的变量的函数，创建闭包的最常见的方式就是在一个函数内创建另一个函数，通过另一个函数访问这个函数的局部变量
-
-### 首先来看一段代码
-
-```js
-	var oLi = document.querySelectorAll('ul li');
-
-	for(var i = 0,iL = oLi.length;i < iL;i++){
-		 //自执行函数
-	    ;(function(thatIDom,thatI){
-	      	var n = 0;
-	        thatIDom.onclick = function(){
-		        console.log(thatI);
-                //加入逻辑判断，触发回收机制
-		        if(n > 2){
-                     //解除引用
-	        		thatIDom.onclick = null;
-		    	}else{
-		        	n++;
-		    	}
-	        }
-	    })(oLi[i],i);
-	}
-```
-
-### 运行结果（每个li最多点击4次）
-
-```js
-thatIDom.onclick = function(){
-	console.log(thatI);
-}
-//形成闭包。
-```
-
-## 闭包的定义
-
 * 犀牛书：函数体内部的变量都可以保存在函数作用域内，这种特性称为闭包。
-* W3C和菜鸟教程：JavaScript 变量可以是局部变量或全局变量。私有变量可以用到闭包。
-* 转载的这篇博客：闭包是指有权访问另一个函数作用域中的变量的函数，创建闭包的最常见的方式就是在一个函数内创建另一个函数，通过另一个函数访问这个函数的局部变量
+* 个人理解：闭包是指有权访问另一个函数作用域中的变量的函数，创建闭包的最常见的方式就是在一个函数内创建另一个函数，内部函数可以访问外面函数中的局部变量，一旦内部函数返回或者被引用，这个局部变量则会已知保留在内存中
 
 ## 闭包有三个特性：
 
-```
+```js
 1.函数嵌套函数
 2.函数内部可以引用外部的参数和变量
 3.参数和变量不会被垃圾回收机制回收
 ```
 
-## 闭包的定义及其优缺点
+## 闭包优缺点
 
-`闭包` 是指有权访问另一个函数作用域中的变量的函数，创建闭包的最常见的方式就是在一个函数内创建另一个函数，通过另一个函数访问这个函数的局部变量
+**缺点**
 
 闭包的缺点就是常驻内存，会增大内存使用量，使用不当很容易造成内存泄露。
 
-闭包是`javascript`语言的一大特点，主要应用闭包场合主要是为了：设计私有的方法和变量。
-
 一般函数执行完毕后，局部活动对象就被销毁，内存中仅仅保存全局作用域。但闭包的情况不同！
+
+**优点及用处**
+
+* 有了闭包之后，可以在外部作用域访问内部作用域的成员
+
+* 希望一个变量长期驻扎在内存中
+* 避免全局变量的污染
+* 私有成员的存在
+
+## vue源码中闭包的应用
+
+```js
+function createPatch(obj) {
+  return function patch(vdom1, vdom2) {
+    // ...
+  }
+}
+const patch = createPatch(...)
+```
 
 ## 嵌套函数的闭包
 
 ```js
-   function aaa() {  
-          var a = 1;  
-          return function(){
-           alert(a++)
-          };  
-        }         
-        var fun = aaa();  
-        fun();// 1 执行后 a++，，然后a还在~  
-        fun();// 2   
-        fun = null;//a被回收！！ 
+function aaa() {  
+  var a = 1;  
+  return function(){
+    alert(a++)
+  };  
+}         
+var fun = aaa();  
+fun();// 1 执行后 a++，，然后a还在~  
+fun();// 2   
+fun = null;//a被回收！！ 
 ```
 
 闭包会使变量始终保存在内存中，如果不当使用会增大内存消耗。
@@ -88,27 +66,17 @@ thatIDom.onclick = function(){
 （1）、在`javascript`中，如果一个对象不再被引用，那么这个对象就会被`GC`回收； 
 （2）、如果两个对象互相引用，而不再被第`3`者所引用，那么这两个互相引用的对象也会被回收。
 
-## 使用闭包的好处
-
-那么使用闭包有什么好处呢？使用闭包的好处是：
-
-```
-1.希望一个变量长期驻扎在内存中
-2.避免全局变量的污染
-3.私有成员的存在
-```
-
 ## 一、全局变量的累加
 
 ```html
 <script>
-var a = 1;
-function abc(){
-        a++;
-        alert(a);
-}
-abc();              //2
-abc();            //3
+  var a = 1;
+  function abc(){
+    a++;
+    alert(a);
+  }
+  abc();              //2
+  abc();            //3
 </script>
 ```
 
@@ -117,13 +85,13 @@ abc();            //3
 ```html
 <script>
 
-function abc(){
-        var a = 1;
-        a++;
-        alert(a);
-}
-abc();                       //2
-abc();                    //2
+  function abc(){
+    var a = 1;
+    a++;
+    alert(a);
+  }
+  abc();                       //2
+  abc();                    //2
 </script>
 ```
 
@@ -133,16 +101,16 @@ abc();                    //2
 
 ```html
 <script>
-function outer(){
-        var x=10;
-        return function(){             //函数嵌套函数
-                x++;
-                alert(x);
-        }
-}
-var y = outer();              //外部函数赋给变量y;
-y();                 //y函数调用一次，结果为11，相当于outer()()；
-y();                //y函数调用第二次，结果为12，实现了累加
+  function outer(){
+    var x=10;
+    return function(){             //函数嵌套函数
+      x++;
+      alert(x);
+    }
+  }
+  var y = outer();              //外部函数赋给变量y;
+  y();                 //y函数调用一次，结果为11，相当于outer()()；
+  y();                //y函数调用第二次，结果为12，实现了累加
 </script>
 ```
 
@@ -152,10 +120,10 @@ y();                //y函数调用第二次，结果为12，实现了累加
 
 ```html
 <script>
-function abc(){
-        alert(123);
-}
-abc();
+  function abc(){
+    alert(123);
+  }
+  abc();
 </script>
 ```
 
@@ -163,9 +131,9 @@ abc();
 
 ```html
 <script>
-(function (){
-        alert(123);
-})();                   //然后通过()直接调用前面的表达式即可，因此函数可以不必写名字；
+  (function (){
+    alert(123);
+  })();                   //然后通过()直接调用前面的表达式即可，因此函数可以不必写名字；
 </script>
 ```
 
@@ -173,15 +141,15 @@ abc();
 
 ```html
 <script>
-var abc = (function(){      //abc为外部匿名函数的返回值
-        var a = 1;
-        return function(){
-                a++;
-                alert(a);
-        }
-})();
-abc();    //2 ；调用一次abc函数，其实是调用里面内部函数的返回值    
-abc();    //3
+  var abc = (function(){      //abc为外部匿名函数的返回值
+    var a = 1;
+    return function(){
+      a++;
+      alert(a);
+    }
+  })();
+  abc();    //2 ；调用一次abc函数，其实是调用里面内部函数的返回值    
+  abc();    //3
 </script>
 ```
 
@@ -189,23 +157,23 @@ abc();    //3
 
 ```html
 <script>
-var aaa = (function(){
-        var a = 1;
-        function bbb(){
-                a++;
-                alert(a);
-        }
-        function ccc(){
-                a++;
-                alert(a);
-        }
-        return {
-                b:bbb,             //json结构
-                c:ccc
-        }
-})();
-aaa.b();     //2
-aaa.c()      //3
+  var aaa = (function(){
+    var a = 1;
+    function bbb(){
+      a++;
+      alert(a);
+    }
+    function ccc(){
+      a++;
+      alert(a);
+    }
+    return {
+      b:bbb,             //json结构
+      c:ccc
+    }
+  })();
+  aaa.b();     //2
+  aaa.c()      //3
 </script>
 ```
 
@@ -215,25 +183,21 @@ aaa.c()      //3
 //使用匿名函数实现局部变量驻留内存中，从而实现累加
 
 <script type="text/javascript">
- 
- function box(){
-     var age = 100;
-     return function(){          //匿名函数
-          age++;
-          return age;
-     };
-     
- } 
-var b = box();
-alert(b());
-alert(b());    //即alert(box()())；
-alert(b());
-alert(b);            //     function () {
-                        //   age++;
-                       // return age;
-                      //       }
 
-b = null；  //解除引用，等待垃圾回收
+  function box(){
+    var age = 100;
+    return function(){          //匿名函数
+      age++;
+      return age;
+    };
+
+  } 
+  var b = box();
+  alert(b());
+  alert(b());    //即alert(box()())；
+  alert(b());
+  alert(b);
+  b = null；  //解除引用，等待垃圾回收
 </script>
 ```
 
@@ -242,60 +206,54 @@ b = null；  //解除引用，等待垃圾回收
 ## 七、在循环中直接找到对应元素的索引
 
 ```html
-   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-    <head>
-            <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-            <title></title>
-    <script>
-    window.onload = function(){
-            var aLi = document.getElementsByTagName('li');
-            for (var i=0;i<aLi.length;i++){
-                    aLi[i].onclick = function(){        //当点击时for循环已经结束
-                    alert(i);
-                    };
-            }
+<script>
+  window.onload = function(){
+    var aLi = document.getElementsByTagName('li');
+    for (var i=0;i<aLi.length;i++){
+      aLi[i].onclick = function(){        //当点击时for循环已经结束
+        alert(i);
+      };
     }
-    </script>
-            
-    </head>
-    <body>
-            <ul>
-                    <li>123</li>
-                    <li>456</li>
-                    <li>789</li>
-                    <li>010</li>
-            </ul>
-    </body>
-    </html>
+  }
+</script>
+
+</head>
+<body>
+  <ul>
+    <li>123</li>
+    <li>456</li>
+    <li>789</li>
+    <li>010</li>
+  </ul>
+</body>
+</html>
 ```
 
 ## 八、使用闭包改写上面代码
 
 ```html
-    <script>
-    window.onload = function(){
-            var aLi = document.getElementsByTagName('li');
-            for (var i=0;i<aLi.length;i++){
-                    (function(i){
-                            aLi[i].onclick = function(){
-                                    alert(i);
-                            };
-                    })(i);
-            }
-            };
-    </script>
-            
-    </head>
-    <body>
-            <ul>
-                    <li>123</li>
-                    <li>456</li>
-                    <li>789</li>
-            </ul>
-    </body>
-    </html>
+<script>
+  window.onload = function(){
+    var aLi = document.getElementsByTagName('li');
+    for (var i=0;i<aLi.length;i++){
+      (function(i){
+        aLi[i].onclick = function(){
+          alert(i);
+        };
+      })(i);
+    }
+  };
+</script>
+
+</head>
+<body>
+  <ul>
+    <li>123</li>
+    <li>456</li>
+    <li>789</li>
+  </ul>
+</body>
+</html>
 ```
 
 ## 九.内存泄露问题
