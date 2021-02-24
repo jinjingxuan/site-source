@@ -159,18 +159,16 @@ console.log(JSON.stringify(a)) //报错
 
 ```js
 function deepClone(obj, hash = new WeakMap()) {
-    // 如果是null或者undefined我就不进行拷贝操作
-    if (obj === null) return obj; 
-    // 处理 Date, RegExp, Error 对象
+    // 处理几种特殊的对象：Date, RegExp, Error
     if (obj instanceof Date) return new Date(obj);
     if (obj instanceof RegExp) return new RegExp(obj);
     if (obj instanceof Error) return new Error(obj);
     // 如果是 function, undefined, symbol, NaN 等不是对象的话是不需要深拷贝
-    if (typeof obj !== "object") return obj;
-    // 是对象的话就要进行深拷贝
+    if (typeof obj !== "object" || obj === null) return obj;
+    // 是对象的话就要进行深拷贝, 若拷贝过直接返回
     if (hash.get(obj)) return hash.get(obj);
-    // 保留 constructor
-    let cloneObj = new obj.constructor();
+    // 否则创建新的对象
+    let cloneObj = new Object();
     hash.set(obj, cloneObj);
     for (let key in obj) {
         if (obj.hasOwnProperty(key)) {
