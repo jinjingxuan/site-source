@@ -163,12 +163,35 @@ f().then((v)=>console.log(v))
 - async/await相比于Generator内置了执行器，可以自动执行，并且async返回的是Promise
 
 ```js
-//首先定义一个方法
-function fetchUser(){
-    return new Promise((reslove,reject)=>{
-        //... reslove()
-        //... reject()
+// 示例1：
+getList() {
+  axios.get('/xxx', {
+    params: {
+      Id: yyy
+    }
+  }).then(res => {
+    if (res && res.status && res.data) {
+      // ...
+    }
+  }).catch(error => {
+    console.log('getLessonListError', error)
+  })
+}
+
+// 示例2：
+async getList() {
+  try {
+    let res = await axios.get('/xxx', {
+      params: {
+        Id: yyy,
+      }
     })
+    if (res && res.status && res.data) {
+      // ...
+    }
+  } catch (error) {
+    console.log('getCourseTaskError', error)
+  }
 }
 ```
 
