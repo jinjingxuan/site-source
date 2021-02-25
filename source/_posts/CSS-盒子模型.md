@@ -79,6 +79,29 @@ BFC（Block formatting context ）“块级格式上下文”。 是用于布局
 
 [![2](https://img-blog.csdnimg.cn/20190428161306268.png)](https://img-blog.csdnimg.cn/20190428161306268.png)
 
+```html
+<style>
+       .box1{
+            float: left;
+            width: 100px;
+            height: 100px;
+            background: green;
+        }
+        .box2{
+            height: 500px;
+            background: red;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+  <div class="box1"></div>
+  <div class="box2"></div>
+</body>
+```
+
+
+
 （2）**解决高度塌陷**：我们知道当浮动的盒子的父元素没有高度时，会出现高度塌陷现象。
 
 [![3](https://img-blog.csdnimg.cn/20190428162141491.png)](https://img-blog.csdnimg.cn/20190428162141491.png)
