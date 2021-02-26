@@ -116,23 +116,100 @@ BFC（Block formatting context ）“块级格式上下文”。 是用于布局
 
 ## 清除浮动
 
-* 给父盒子添加高度
-* 在浮动元素后使用一个空元素如`<div class="clear"></div>`，并在CSS中赋予`.clear{clear:both;}`属性即可清理浮动。
-* 父盒子设置`overflew`不为`visible`，触发父盒子的`BFC`，浮动元素也参与高度计算
-* :after伪元素，给浮动元素的容器添加一个clearfix的class，然后给这个class添加一个:after伪元素实现元素末尾添加一个看不见的块元素清理浮动。
+> 1. 浮动元素后面加空 div 
+> 2. 利用 BFC
+> 3. 利用 after 伪元素
 
-```css
-.clearfix:after{
-  content: "020"; /*content设置成一个看不见的空格*/
-  display: block; 
-  height: 0; 
-  clear: both; 
-  visibility: hidden;  
-}
+* 浮动元素后面加一个空的`div`，并为它清除浮动
+
+```html
+<style>
+  .wrap{
+    width:500px;
+    height:400px;
+    border:1px solid red;
+    margin:0 auto;
+  }
+  .float{
+    width:200px;
+    height:200px;
+    background:#ccc;
+    float:left;
+  }
+  .nofloat{
+    width:300px;
+    height:150px;
+    background:red;
+  }
+  .clear{
+    clear:both;
+  }
+</style>
+
+<div class="wrap">
+  <div class="float">浮动</div>
+  <div class="clear"></div>
+  <div class="nofloat">不想被浮动影响</div>
+</div>
 ```
 
-通过上面的例子，我们不难发现清除浮动的方法可以分成两类：
+* 利用BFC特性清除浮动（BFC中浮动元素也会参与计算高度）
 
-1. 利用 clear 属性，包括在浮动元素末尾添加一个带有 clear: both 属性的空 div 来闭合元素，其实利用 :after 伪元素的方法也是在元素末尾添加一个内容为一个点并带有 clear: both 属性的元素实现的。
+```html
+<style>
+  .wrap{
+    width:500px;
+    border:1px solid red;
+    margin:0 auto;
+    overflow:hidden;
+  }
+  .float{
+    width:200px;
+    height:200px;
+    background:#ccc;
+    float:left;
+  }
+  .nofloat{
+    width:300px;
+    height:150px;
+    background:red;
+  }
+</style>
 
-2. 触发浮动元素父元素的 BFC (Block Formatting Contexts, 块级格式化上下文)，使到该父元素可以包含浮动元素，关于这一点。
+<div class="wrap">
+  <div class="float">浮动</div>
+  <div class="nofloat">不想被浮动影响</div>
+</div>
+```
+
+* 使用`after`伪元素，给浮动元素的父元素清除浮动
+
+```html
+<style>
+  .wrap{
+    width:500px;
+    border:1px solid red;
+    margin:0 auto;
+  }
+  .float{
+    width:200px;
+    height:200px;
+    background:#ccc;
+    float:left;
+  }
+
+  .wrap:after{
+    content:'clear';
+    display:block;
+    height:0;
+    clear:both;
+    overflow:hidden;
+    visibility:hidden;
+  }
+</style>
+
+<div class="wrap">
+  <div class="float">浮动</div>
+</div>
+```
+
