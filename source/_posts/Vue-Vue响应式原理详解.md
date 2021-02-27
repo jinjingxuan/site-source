@@ -78,9 +78,7 @@ created: function () {
       // 触发事件
       $emit (eventType) {
         if (this.subs[eventType]) {
-          this.subs[eventType].foreach(handler => {
-            handler()
-          })
+          this.subs[eventType].forEach(handler => handler())
         }
       }
     }
@@ -109,7 +107,7 @@ created: function () {
 * 没有事件中心
 
 ```js
- // 发布者-目标
+    // 发布者-目标
     class Dep {
       constructor () {
         // 记录所有的订阅者
@@ -123,11 +121,10 @@ created: function () {
       }
       // 发布通知
       notify () {
-        this.subs.forEach(sub => {
-          sub.update()
-        })
+        this.subs.forEach(sub => sub.update())
       }
     }
+
     // 订阅者-观察者
     class Watcher {
       update () {
@@ -140,7 +137,6 @@ created: function () {
     let watcher = new Watcher()
 
     dep.addSub(watcher)
-
     dep.notify()
 ```
 
