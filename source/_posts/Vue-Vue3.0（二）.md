@@ -21,7 +21,7 @@ categories: Vue
   * track
   * trigger
 
-> effect 函数用于定义副作用，它的参数就是副作用函数，当响应数据变化后，会导致副作用函数重新执行
+> effect 函数用于定义副作用，它的参数就是副作用函数，会默认执行一次，当响应数据变化后，会导致副作用函数重新执行。
 >
 > track 用来收集依赖（收集effect），trigger 用来触发响应（执行effect）
 

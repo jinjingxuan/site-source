@@ -376,7 +376,7 @@ vm.items.splice(newLength)
 
 **那么究竟是如何触发依赖实现响应式的呢，从组件渲染阶段开始说起**
 
-vue源码的 instance/init.js 中是初始化的入口，其中初始化中除了初始化的几个步骤以外，在最后有这样一段 代码：
+vue源码的 instance/init.js 中是初始化的入口，其中初始化中除了初始化的几个步骤以外，在最后有这样一段代码，**要实现的功能是挂载到el上，要么是运行时有render直接挂载，要么将template/el编译一下再挂载**
 
 ```js
 if (vm.$options.el) {
@@ -384,11 +384,68 @@ if (vm.$options.el) {
 }
 ```
 
-* 一共有两个`$mount`,第一个定义在`entry-runtime-with-compiler.js`文件中,`$mount()`的核心作用是帮我们把模板编译成`render`函数，但它首先会判断一下当前是否传入了`render`选项，如果没有传入的话，它会去获取我们的`template`选项，如果`template`选项也没有的话，他会把`el`中的内容作为我们的模板，然后把模板编译成`render`函数，它是通过`compile`函数，帮我们把模板编译成`render`函数的,当把`render`函数编译好之后，它会把`render`函数存在我们的`options.render`中。（[Vue 完整版和运行时版本的区别](https://juejin.cn/post/6844904073238446093)）
-* 接着会调用`src/platforms/web/runtime/index.js`文件中的`$mount`方法,在这个中首先会重新获取`el`，因为如果是运行时版本的话，是不会走`entry-runtime-with-compiler.js`这个入口中获取el，我们会在runtime/index.js的$mount()中重新获取el。
-* 接下来调用`mountComponent()`,首先会判断`render`选项，如果没有`render`选项，但是我们传入了模板，会发送一个警告，,告诉我们如果是运行时版本不支持编译器。接下来会触发beforeMount这个生命周期中的钩子函数，也就是开始挂载之前。
+* 一共有两个`$mount`,第一个定义在`entry-runtime-with-compiler.js`文件中，这是[完整构建版本的入口](https://juejin.cn/post/6844904073238446093)，首先会判断一下当前是否传入了`render`选项，如果没有传入的话，它会去获取我们的`template`选项，如果`template`选项也没有的话，他会把`el`中的内容作为我们的模板，然后把模板编译成`render`函数，存在我们的`options.render`中，优先级[`render > template > el`](https://blog.csdn.net/jiang7701037/article/details/83178630)
+* 另一个`$mount`是`src/platforms/web/runtime/index.js`文件中的`$mount`方法
+  * 运行时版本的挂载入口，可以直接调用，因为运行时存在`render`，直接挂载到el上即可
+  * 完整版本的`$mount`函数的最后调用，因为完整版本经过`template`编译之后，也有了`render`
+
+```js
+Vue.prototype.$mount = function(
+    el?: string | Element,
+    hydrating?: boolean
+): Component {
+    // 判断el, 以及宿主环境, 然后通过工具函数query重写el。
+    el = el && inBrowser ? query(el) : undefined
+    // 执行真正的挂载并返回
+    return mountComponent(this, el, hydrating)
+}
+```
+
+* 接下来调用`mountComponent()`，首先会判断`render`选项，如果没有`render`选项，会报出警告
+  * 如果我们传入了`template`或`el`，然后还没有`render`，会告诉我们如果是运行时版本不支持编译器。
+  * 否则会警告`template or render function not defined`
+* 接下来会触发beforeMount这个生命周期中的钩子函数，也就是开始挂载之前。
+
+```js
+export function mountComponent(
+    vm: Component, // 组件实例vm
+    el: ?Element, // 挂载点
+    hydrating?: boolean
+): Component {
+    // 在组件实例对象上添加$el属性
+    // $el的值是组件模板根元素的引用
+    vm.$el = el
+    if (!vm.$options.render) {
+        // 渲染函数不存在, 这时将会创建一个空的vnode对象
+        vm.$options.render = createEmptyVNode
+        if (process.env.NODE_ENV !== "production") {
+            /* istanbul ignore if */
+            if (
+                (vm.$options.template &&
+                    vm.$options.template.charAt(0) !== "#") ||
+                vm.$options.el ||
+                el
+            ) {
+                warn(
+                    "You are using the runtime-only build of Vue where the template " +
+                        "compiler is not available. Either pre-compile the templates into "+
+                        "render functions, or use the compiler-included build.",
+                    vm
+                )
+            } else {
+                warn(
+                    "Failed to mount component: template or render function not defined.",
+                    vm
+                )
+            }
+        }
+    }
+    // 触发 beforeMount 生命周期钩子
+    callHook(vm, "beforeMount")
+```
+
 * 然后定义了updateComponent()，在这个函数中，调用`vm._render`和`vm._update`，`vm._render`的作用是生成虚拟DOM，`vm._update`的作用是将虚拟`DOM`转换成真实`DOM`，并且挂载到页面上
-* 创建`Watcher`对象，在创建`Watcher`时，传递了`updateComponent`这个函数，这个函数最终是在`Watcher`内部调用的。在`Watcher`内部会用`get`方法，当Watcher创建完成之后,会触发生命周期中的`mounted`钩子函数,在get方法中，会调用`updateComponent()`
+* 然后创建`Watcher`对象，在创建`Watcher`时，传递了`updateComponent`这个函数，这个函数最终是在`Watcher`内部调用的。在`Watcher`内部会用`get`方法，当Watcher创建完成之后,会触发生命周期中的`mounted`钩子函数,在get方法中，会调用`updateComponent()`
 
 ```js
 new Watcher(vm, updateComponent, noop, {
@@ -402,6 +459,8 @@ new Watcher(vm, updateComponent, noop, {
 // vm ：与Wather对应的Vue Component实例，这种对应关系通过Wather去管理
 // updateComponent：可以理解成Vue Component的更新函数，调用实例render和update两个方法，render作用是将Vue对象渲染成虚拟DOM,update是通过虚拟DOM创建或者更新真实DOM
 ```
+
+* [更多详细请看](https://zhuanlan.zhihu.com/p/110441137)
 
 Watche 实例分为渲染 watcher (render watcher),计算属性 watcher (computed watcher),侦听器 watcher（user watcher）三种：
 
@@ -431,7 +490,7 @@ class Watcher {
   }
     
   get () { // 触发取值操作，进而触发属性的getter
-    pushTarget(this) // Dep 中提到的：给 Dep.target 赋值
+    pushTarget(this) // Dep 中提到的：给 Dep.target 赋值 watcher
     let value
     const vm = this.vm
     try {
@@ -463,30 +522,10 @@ class Watcher {
 
 ### 响应式的整体流程
 
-总结一下响应式的整体流程：
-假设有模版：
+* 组件实例初始化过程中，data的每个属性都有自己的getter、setter方法，用于收集依赖和触发依赖
 
-```vue
-<div id="test">
-  {{str}}
-</div>
-```
-
-1. 调用$mount()函数进入到挂载阶段
-2. 检查是否有render()函数，根据上述模版创建render()函数
-3. 调用了mountComponent()函数完成挂载，并在mountComponen()中定义并初始化updateComponent()
-4. 为渲染函数添加观察者，在观察者中对渲染函数求值
-5. 在求值的过程中触发数据对象str的get，在str的get中收集str的观察者到数据的dep中
-6. 修改str的值时，触发str的set，在set中调用数据的dep的notify触发响应
-7. notify中对每一个观察者调用update方法更新视图
-
-****
-
-总结下官方的描述,大概分为一下几点：
-
-- 组件实例有自己的watcher对象，用于记录数据依赖
-- 组件中的data的每个属性都有自己的getter、setter方法，用于收集依赖和触发依赖
-- 组件渲染过程中，调用data中的属性的getter方法，将依赖收集至watcher对象
+- 组件渲染过程中，在`mountComponent`中初始化组件自己的watcher对象，用于记录数据依赖
+- watcher的内部有触发取值的操作，调用data中的属性的getter方法，收集依赖
 - data中的属性变化，会调用setter中的方法，告诉watcher有依赖发生了变化
 - watcher收到依赖变化的消息，重新渲染虚拟dom，实现页面响应
 
