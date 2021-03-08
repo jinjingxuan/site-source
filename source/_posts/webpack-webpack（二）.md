@@ -281,9 +281,9 @@ module.exports = {
 
 > *+++ 非常快速, ++ 快速, + 比较快, o 中等, - 比较慢, -- 慢*
 
-* eval：是否使用 eval 执行模块代码，通过 SourceURL 标注文件路径，并没有生成 SourceMap
+* eval：打包后的模块都使用 `eval()` 执行，不产生独立的 map 文件
 * cheap：Source map是否包含行信息
-* module：是否能够得到 Loader 处理之前的源代码
+* module：是否能够得到 Loader 处理之前的源代码，即手写的es6没有编译的源代码
 * inline：使用 dataURL 把 SourceMap 嵌入 （不常用）
 * hidden：控制台看不到SourceMap
 *  nosources：看不见源代码，生产环境保护源代码
@@ -296,6 +296,6 @@ module.exports = {
 
 ****
 
-开发模式：cheap-eval-source-map
+开发模式：cheap-module-eval-source-map
 
 生产模式：none
