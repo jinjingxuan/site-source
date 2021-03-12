@@ -63,35 +63,39 @@ created: function () {
 #### 模拟实现vue的自定义事件
 
 ```js
-	// 类内部存储一个对象，包含事件名和对应的触发函数
-    // { click: [fn1, fn2], change: fn }
-    class EventEmitter {
-      constructor () {
-        this.subs = Object.create(null)
-      }
-      // 注册事件
-      $on (eventType, handler) {
-        this.subs[eventType] = this.subs[eventType] || []
-        this.subs[eventType].push(handler)
-      }
+// 类内部存储一个对象，包含事件名和对应的触发函数
+// { click: [fn1, fn2], change: fn }
+class EventEmitter {
+  constructor () {
+    this.subs = Object.create(null)
+  }
+  // 注册事件
+  $on (eventType, handler) {
+    this.subs[eventType] = this.subs[eventType] || []
+    this.subs[eventType].push(handler)
+  }
 
-      // 触发事件
-      $emit (eventType) {
-        if (this.subs[eventType]) {
-          this.subs[eventType].forEach(handler => handler())
-        }
-      }
+  // 触发事件
+  $emit (eventType) {
+    if (this.subs[eventType]) {
+      this.subs[eventType].forEach(handler => handler())
     }
+  }
 
-    // 测试
-    let em = new EventEmitter() // 信号中心
-    em.$on('click', () => {
-      console.log('click1')
-    })
-    em.$on('click', () => {
-      console.log('click2')
-    })
-    em.$emit('click')
+  $off(eventType) {
+    this.subs[eventType] = []
+  }
+}
+
+// 测试
+let em = new EventEmitter() // 信号中心
+em.$on('click', () => {
+  console.log('click1')
+})
+em.$on('click', () => {
+  console.log('click2')
+})
+em.$emit('click')
 ```
 
 [Object.create(null) 和 {} 的区别](https://juejin.cn/post/6844903589815517192)
