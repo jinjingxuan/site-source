@@ -1,6 +1,6 @@
 ---
 title: JavaScript设计模式
-date: 2021-1-8 16:00:54
+date: 2020-12-08 16:00:54
 categories: 设计模式
 ---
 

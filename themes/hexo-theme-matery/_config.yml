@@ -54,7 +54,7 @@ cover:
 # index page dream text,
 # 配置首页显示"梦想"的语句.
 dream:
-  enable: true
+  enable: false
   showTitle: true
   title: 做好自己
   text: 永远不必去羡慕别人的生活，也不要去羡慕别人的光环，在不知不觉中独自修行，努力找到一条适合自己的路，我们自然就会成就自己的人生。
@@ -550,7 +550,7 @@ addthis:
 # 打字效果副标题.
 # 如果有符号 ‘ ，请在 ’ 前面加上 \
 subtitle:
-  enable: true
+  enable: false
   loop: true # 是否循环
   showCursor: true # 是否显示光标
   startDelay: 300 # 开始延迟
