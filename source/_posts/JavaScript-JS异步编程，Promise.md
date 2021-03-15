@@ -195,6 +195,18 @@ async getList() {
 }
 ```
 
+```js
+async function foo() {
+    await 1
+    console.log('async')
+}
+
+// 等价于
+function foo() {
+    return Promise.resolve(1).then(() => console.log('async'))
+}
+```
+
 ## 宏任务，微任务，事件循环
 
  **宏任务(macrotask)：**：
@@ -280,6 +292,50 @@ setTimeout
 >  因而在script任务执行完毕之后，开始查找清空微任务队列。此时，微任务中， Promise 队列有的两个任务async1 end和promise2，因此按先后顺序输出 async1 end，promise2。当所有的 Microtasks 执行完毕之后，表示第一轮的循环就结束了
 
 > 6.第二轮循环依旧从宏任务队列开始。此时宏任务中只有一个 setTimeout，取出直接输出即可，至此整个流程结束
+
+```js
+// 上题变形
+// 本来是把 async1 end 加入微任务队列，结果 async 又返回了一个 promise ，加入微任务队列的就是这个 promise，执行完 async，最后才执行 async1 end
+async function async1() {
+    console.log('async1 start')
+    await async2() 
+    console.log('async1 end')
+}
+async function async2() {
+    console.log('async2 start')
+    return new Promise((resolve, reject) => {
+        resolve()
+        console.log('async2 promise')
+    })
+}
+console.log('script start')
+setTimeout(function() {
+    console.log('setTimeout')
+}, 0)
+async1()
+new Promise(function(resolve) {
+    console.log('promise1')
+    resolve()
+}).then(function() {
+    console.log('promise2')
+}).then(function() {
+    console.log('promise3')
+})
+console.log('script end')
+
+/**
+script start
+async1 start
+async2 start
+async2 promise
+promise1
+script end
+promise2
+promise3
+async1 end     注意这里 async 显示返回了 promise ，最后执行
+setTimeout
+*/
+```
 
 面试官问：
 
