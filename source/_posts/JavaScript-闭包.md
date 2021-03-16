@@ -36,27 +36,33 @@ categories: JavaScript
 ## vue源码中闭包的应用
 
 ```js
-function createPatch(obj) {
+function createPatchFunction(nodeOps, modules) {
   return function patch(vdom1, vdom2) {
     // ...
   }
 }
 const patch = createPatch(...)
+/**
+因为vue可以运行在多个平台上通过nodeOps来区分，如果直接写在path里面的话，需要在path里面写一系列if平台判断，多次执行path会判断多次，那么如过通过闭包把这个平台差异只执行一次就判断出来，今后不需要判断就好了
+*/                 
 ```
 
-## 嵌套函数的闭包
+## 闭包与高阶函数
 
 ```js
-function aaa() {  
-  var a = 1;  
-  return function(){
-    alert(a++)
-  };  
-}         
-var fun = aaa();  
-fun();// 1 执行后 a++，，然后a还在~  
-fun();// 2   
-fun = null;//a被回收！！ 
+// 函数作为返回值
+function fn() {
+    let a = 1
+    return function() {
+        console.log(a++)
+    }
+}
+
+let fn1 = fn()
+fn1()
+
+// 函数作为参数
+
 ```
 
 闭包会使变量始终保存在内存中，如果不当使用会增大内存消耗。
