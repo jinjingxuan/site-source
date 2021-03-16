@@ -448,8 +448,8 @@ export function mountComponent(
     callHook(vm, "beforeMount")
 ```
 
-* 然后定义了updateComponent()，在这个函数中，调用`vm._render`和`vm._update`，`vm._render`的作用是生成虚拟DOM，`vm._update`的作用是将虚拟`DOM`转换成真实`DOM`，并且挂载到页面上
-* 然后创建`Watcher`对象，在创建`Watcher`时，传递了`updateComponent`这个函数，这个函数最终是在`Watcher`内部调用的。在`Watcher`内部会用`get`方法，当Watcher创建完成之后,会触发生命周期中的`mounted`钩子函数,在get方法中，会调用`updateComponent()`
+* 然后定义了updateComponent()，在这个函数中，调用`vm._render`和`vm._update`，`vm._render`的作用是生成虚拟DOM，`vm._update`的作用是将虚拟`DOM`转换成真实`DOM`，并且挂载到页面上，这里只是定义
+* 然后创建`Watcher`对象，在创建`Watcher`时，传递了`updateComponent`这个函数，这个函数最终是在`Watcher`内部调用的。在`Watcher`内部会用`get`方法，当Watcher创建完成之后,会触发生命周期中的`mounted`钩子函数
 
 ```js
 new Watcher(vm, updateComponent, noop, {
@@ -463,6 +463,8 @@ new Watcher(vm, updateComponent, noop, {
 // vm ：与Wather对应的Vue Component实例，这种对应关系通过Wather去管理
 // updateComponent：可以理解成Vue Component的更新函数，调用实例render和update两个方法，render作用是将Vue对象渲染成虚拟DOM,update是通过虚拟DOM创建或者更新真实DOM
 ```
+
+上面说在创建 Watcher 实例的时候会调用`get`方法，在get方法中，会调用`updateComponent()`，调用其中的`_render`函数找到传入或者编译生成的`render`函数去生成虚拟DOM，然后调用`_update`方法将虚拟DOM转换成真实DOM
 
 * [更多详细请看](https://zhuanlan.zhihu.com/p/110441137)
 
