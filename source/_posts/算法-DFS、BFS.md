@@ -7,6 +7,7 @@ categories: 算法
 * 深度优先遍历
 * 广度优先遍历
 * 求根到叶子节点数字之和（DFS）
+* 路径总和
 * 单词接龙（BFS）
 * N叉树的最大深度（BFS）
 * 打家劫舍三（DFS）
@@ -116,6 +117,28 @@ const dfs = function(root, n) {
 
 var sumNumbers = function(root) {
     return dfs(root, 0)
+};
+```
+
+## 路径总和
+
+* [leetcode112](https://leetcode-cn.com/problems/path-sum/)
+
+```js
+var hasPathSum = function(root, targetSum) {
+    const res = []
+    const dfs = (root, num) => {
+        if (root === null) return
+        const val = num + root.val
+        if (root.left === null && root.right === null) {
+            res.push(val)
+        } else {
+            dfs(root.left, val) 
+            dfs(root.right, val) 
+        }
+    }
+    dfs(root, 0)
+    return res.includes(targetSum)
 };
 ```
 
