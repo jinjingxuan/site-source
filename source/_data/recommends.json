@@ -1,7 +1,7 @@
 [{
-    "summary": "动态规划是运筹学的一个分支，是求解决策过程最优化的过程。美国数学家贝尔曼等在研究多阶段决策过程的问题时，提出了动态规划。",
-    "path": "https://jinjingxuan.github.io/2020/11/16/%E7%AE%97%E6%B3%95-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/",
-    "title": "动态规划"
+    "summary": "最近一直在搜集和准备的面试题，包括JS，CSS，浏览器原理，计算机网络，算法题等，待补充。",
+    "path": "https://jinjingxuan.github.io/2021/03/12/%E9%9D%A2%E8%AF%95-%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E7%9F%A5%E8%AF%86%E7%82%B9/",
+    "title": "面试题目"
 }, {
     "img": "https://sunhwee.com/medias/featureimages/14.jpg",
     "summary": "从设计模式出发：发布订阅模式/观察者模式，到Vue实例初始化的细节与过程，再到Vue组件渲染过程的剖析来进行响应式原理的总结。",
