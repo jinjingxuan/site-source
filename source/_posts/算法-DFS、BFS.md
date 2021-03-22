@@ -8,6 +8,7 @@ categories: 算法
 * 广度优先遍历
 * 求根到叶子节点数字之和（DFS）
 * 路径总和
+* 岛屿数量
 * 单词接龙（BFS）
 * N叉树的最大深度（BFS）
 * 打家劫舍三（DFS）
@@ -139,6 +140,38 @@ var hasPathSum = function(root, targetSum) {
     }
     dfs(root, 0)
     return res.includes(targetSum)
+};
+```
+
+## 岛屿数量
+
+* [leetcode200](https://leetcode-cn.com/problems/number-of-islands/)
+* 思路：从为"1"的开始，向四周dfs，把遇到的"1"变为"0"
+
+```js
+var numIslands = function(grid) {
+    const dfs = (grid, i, j, row, col) => {
+        if (i < 0 || j < 0 || i > row - 1 || j > col - 1 || grid[i][j] === "0") {
+            return
+        }
+        grid[i][j] = "0"
+        dfs(grid, i - 1, j, row, col)
+        dfs(grid, i + 1, j, row, col)
+        dfs(grid, i, j - 1, row, col)
+        dfs(grid, i, j + 1, row, col)
+    }
+    if (grid.length === 0) return 0
+    const row = grid.length, col = grid[0].length
+    let count = 0
+    for (let i = 0; i < row; i++) {
+        for (let j = 0; j < col; j++) {
+            if (grid[i][j] === "1") {
+                dfs(grid, i, j, row, col)
+                count ++
+            }
+        }
+    }
+    return count
 };
 ```
 
