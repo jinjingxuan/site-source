@@ -9,7 +9,7 @@
 	"title": "Vue响应式原理"
 }, {
 	"summary": "虚拟DOM是由普通的 JS 对象来描述 DOM 对象，因为不是真实的 DOM 对象，所以叫虚拟 DOM。",
-	"path": "https://jinjingxuan.github.io/2020/09/24/VirtualDOM-VirtualDOM%E4%B8%8EDiff%E7%AE%97%E6%B3%95/",
+	"path": "https://jinjingxuan.github.io/2021/01/15/VirtualDOM-VirtualDOM%E4%B8%8EDiff%E7%AE%97%E6%B3%95/",
 	"title": "Virtual DOM"
 },  {
 	"summary": "解决一个回溯问题，实际上就是一个决策树的遍历过程。基本原理就是递归，从一条路往前走，能进则进，不能进则退回来，换一条路再试。",
