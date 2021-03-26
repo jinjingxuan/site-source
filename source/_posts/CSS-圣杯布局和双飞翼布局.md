@@ -4,6 +4,84 @@ date: 2018-09-18 19:00:54
 categories: CSS
 ---
 
+## 传统三栏布局
+
+```html
+<style>
+    .wrap {
+        display: flex;
+    }
+    .middle {        
+        flex: 1;
+    }
+    .left {
+        width: 300px;
+    }
+    .right {        
+        width: 300px;
+    }
+</style>
+
+</head>
+<body>
+    <div class="wrap">
+        <div class="left"></div>
+        <div class="middle"></div>
+        <div class="right"></div>
+    </div>
+</body>
+```
+
+```html
+<style>
+    .middle {
+        margin: 0 300px;
+    }
+    .left {
+        width: 300px;
+        float: left;
+    }
+    .right {        
+        width: 300px;
+        float: right;
+    }
+</style>
+
+</head>
+<body>
+    <div class="left"></div>
+    <div class="right"></div>
+    <div class="middle"></div>
+</body>
+```
+
+```html
+<style>
+    .middle {
+        margin: 0 300px;
+    }
+    .left {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 300px;
+    }
+    .right {  
+        position: absolute;
+        top: 0;
+        right: 0;      
+        width: 300px;
+    }
+</style>
+
+</head>
+<body>
+    <div class="left"></div>
+    <div class="right"></div>
+    <div class="middle"></div>
+</body>
+```
+
 圣杯布局跟双飞翼布局的实现，目的都是左右两栏固定宽度，中间部分自适应。
 中间栏放在最前面优先渲染。 
 
