@@ -28,38 +28,36 @@ function deepTraversal(node,nodeList) {
     return nodeList;  
 } 
 
-//深度优先非递归
+// 深度优先非递归
 function deepTraversal(node) {  
-    var nodeList = [];  
-    if (node) {  
-        var stack = [];  
-        stack.push(node);  
-        while (stack.length != 0) {  
-            var childrenItem = stack.pop();  
-            nodeList.push(childrenItem);  
-            var childrenList = childrenItem.children;  
-            for (var i = childrenList.length - 1; i >= 0; i--)  //从右向左进栈
-                stack.push(childrenList[i]);  
-        }  
-    }    
-    return nodeList;  
-} 
+    const res = []
+    const stack = []
+    stack.push(node)
+    while (stack.length) {
+        let tmp = stack.pop()
+        res.push(tmp)
+        let childrenList = tmp.children
+        for (let i = 0; i < childrenList.length; i++) {
+            stack.push(childrenList[i])
+        }
+    }
+    return res
+}
 
-//广度非递归
-function wideTraversal(node) {  
-    var nodes = [];  
-    if (node != null) {  
-        var queue = [];  
-        queue.unshift(node);     //加入根节点
-        while (queue.length != 0) {  
-            var item = queue.shift();  //拿出队头元素
-            nodes.push(item);          //加入结果
-            var children = item.children;  //队友元素的孩子加入队尾
-            for (var i = 0; i < children.length; i++)  
-                queue.push(children[i]);  
-        }  
-    }  
-    return nodes;  
+// 广度非递归
+function wideTraversal(node) {
+    const res = []
+    const queue = []
+    queue.push(node)
+    while (queue.length) {
+        let tmp = queue.shift()
+        res.push(tmp)
+        let childrenList = tmp.children
+        for (let i = 0; i < childrenList.length; i++) {
+            queue.push(childrenList[i])
+        }
+    }
+    return res
 }
 ```
 
