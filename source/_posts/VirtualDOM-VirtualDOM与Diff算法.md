@@ -434,3 +434,5 @@ key: 2  id: 2 index: 1 name: test2     key: 3  id: 3 index: 3  name: test3
 key: 3  id: 3 index: 2 name: test3     
 ```
 
+再比如中间插入的时候，如果使用index作为key会造成复用
+
