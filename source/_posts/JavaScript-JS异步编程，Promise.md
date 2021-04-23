@@ -80,7 +80,7 @@ dianwaimai().then(res=>console.log(res)).catch(res=>console.log(res))
 
 ### Promise静态方法
 
-* Promise.reslove
+* Promise.reslove(value)：相当于`new Promise(resolve => resolve(value))`,对参数都做了四种判断
 * Promise.reject
 
 **这两种方法均会创建Promise对象**
@@ -94,6 +94,70 @@ Promise.reject(new Error('rejected'))
 	.catch(err => console.log(err))
 // Error: rejected
 //    at <anonymous>:1:16
+```
+
+Promise.resolve方法的参数分成四种情况。
+
+**1）参数是一个 Promise 实例**
+
+如果参数是 Promise 实例，那么Promise.resolve将不做任何修改、原封不动地返回这个实例。
+
+**2）参数是一个thenable对象**
+
+thenable对象指的是具有then方法的对象，比如下面这个对象。
+
+```js
+let thenable = {
+  then: function(resolve, reject) {
+    resolve(42);
+  }
+};
+```
+
+Promise.resolve方法会将这个对象转为 Promise 对象，然后就立即执行thenable对象的then方法。
+
+```js
+let thenable = {
+  then: function(resolve, reject) {
+    resolve(42);
+  }
+};
+
+let p1 = Promise.resolve(thenable);
+p1.then(function(value) {
+  console.log(value);  // 42
+});
+```
+
+上面代码中，thenable对象的then方法执行后，对象p1的状态就变为resolved，从而立即执行最后那个then方法指定的回调函数，输出 42。
+
+**3）参数不是具有then方法的对象，或根本就不是对象。**
+
+如果参数是一个原始值，或者是一个不具有then方法的对象，则Promise.resolve方法返回一个**新的 Promise 对象**，状态为resolved。
+
+```js
+const p = Promise.resolve('Hello');
+
+p.then(function (s){
+  console.log(s)
+});
+// Hello
+```
+
+上面代码生成一个新的 Promise 对象的实例p。由于字符串Hello不属于异步操作（判断方法是字符串对象不具有 then 方法），返回 Promise 实例的状态从一生成就是resolved，所以回调函数会立即执行。Promise.resolve方法的参数，会同时传给回调函数。
+
+**4）不带有任何参数**
+
+Promise.resolve方法允许调用时不带参数，直接返回一个resolved状态的 Promise 对象。
+
+所以，如果希望得到一个 Promise 对象，比较方便的方法就是直接调用Promise.resolve方法。
+
+```js
+const p = Promise.resolve();
+
+p.then(function () {
+  // ...
+});
 ```
 
 ## Generator
@@ -149,63 +213,123 @@ ES2017提供了`async`函数，使得异步操作变得更加方便。`async`函
 
 - async函数返回的就是一个Promise对象，所接收的值就是函数return的值
 
+- await  操作符用于等待一个Promise 对象。它只能在异步函数 async function 中使用。
+- await 表达式会暂停当前 async function 的执行，等待 Promise 处理完成。若 Promise 正常处理(fulfilled)，其回调的resolve函数参数作为 await 表达式的值，继续执行 async function。
+- 若 Promise 处理异常(rejected)，await 表达式会把 Promise 的异常原因抛出。
+- 另外，如果 await 操作符后的表达式的值不是一个 Promise，则返回该值本身。
+
+**相比于Generator的改进**
+
+* `内置执行器`。Generator 函数的执行必须依靠执行器，而 async 函数自带执行器，无需手动执行 next() 方法。
+
+* `更好的语义`。async和await，比起星号和yield，语义更清楚了。async表示函数里有异步操作，await表示紧跟在后面的表达式需要等待结果。
+
+* `更广的适用性`。co模块约定，yield命令后面只能是 Thunk 函数或 Promise 对象，而async函数的await命令后面，可以是 Promise 对象和原始类型的值（数值、字符串和布尔值，但这时会自动转成立即 resolved 的 Promise 对象）。
+
+* `返回值是 Promise`。async 函数返回值是 Promise 对象，比 Generator 函数返回的 Iterator 对象方便，可以直接使用 then() 方法进行调用。
+
+### 基本使用
+
 ```js
-async function f(){
+function getData () {
+    return new Promise(resolve => {
+        setTimeout(resolve, 1000, '结果') // 异步模拟数据请求
+    })
+}
+
+async function asyncFn () {
+    let res = await getData()
+    console.log(res) // 1s之后输出 '结果'
+}
+```
+
+### await后的值也可以是普通值
+
+```js
+async function fn () {
+    return await 123
+}
+fn().then(res => console.log(res)) // 123
+```
+
+### async返回一个Promise对象
+
+当没发生错误时 return 的值会成为 `then` 方法回调函数的参数。
+
+而当抛出错误时，会导致Promise对象变为 `reject` 状态，抛出的错误也会成为 `catch` 方法回调函数的参数。
+
+```js
+async function f1(){
     return 'hello world'
 }
-f().then((v)=>console.log(v))
+f1().then(res => {
+  console.log(res)} // hello world
+)
+
+async function f2() {
+  throw new Error('error')
+}
+f2().then(res => {
+    console.log(res)
+}).catch(err => {
+    console.log(err) // Error: error
+})
 ```
 
-- 在async函数内部可以使用await命令，表示等待一个异步函数的返回。
-- 每遇到await关键字时，Promise都会停下，一直到运行结束。
-- await后面跟着的是一个Promise对象，如果不是的话会调用Promise.resolve方法将其转为一个resolve的Promise对象
-- Promise.resolve(x)相当于new Promise(resolve=>resolve(x))的简写
-- async/await相比于Generator内置了执行器，可以自动执行，并且async返回的是Promise
+### 同时发多个请求
 
 ```js
-// 示例1：
-getList() {
-  axios.get('/xxx', {
-    params: {
-      Id: yyy
-    }
-  }).then(res => {
-    if (res && res.status && res.data) {
-      // ...
-    }
-  }).catch(error => {
-    console.log('getLessonListError', error)
-  })
+async function getABC() {
+  let A = await getA()
+  let B = await getB()
+  let C = await getC()
+  return A + B + C
 }
 
-// 示例2：
-async getList() {
-  try {
-    let res = await axios.get('/xxx', {
-      params: {
-        Id: yyy,
-      }
+// 正确处理
+async function getABC() {
+  let results = await Promise.all([getA, getB, getC])
+  return results.reduce((acc, cur) => acc + cur, 0)
+}
+```
+
+### try...catch处理错误
+
+```js
+function getData() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            reject(new Error('error')) // 模拟出错
+        }, 1000)
     })
-    if (res && res.status && res.data) {
-      // ...
+}
+async function fn() {
+    let res = await getData() // 会抛出错误，且不会向下执行
+    console.log(res) // 不会输出任何
+}
+
+// try..catch处理
+function getData() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            reject(new Error('error'))
+        }, 1000)
+    })
+}
+async function fn() {
+    try {
+        let res = await getData()
+        console.log(res)
+    } catch (err) {
+        console.log(err) // Error: error
     }
-  } catch (error) {
-    console.log('getCourseTaskError', error)
-  }
-}
-```
-
-```js
-async function foo() {
-    await 1
-    console.log('async')
+    console.log('继续执行') // 会输出
 }
 
-// 等价于
-function foo() {
-    return Promise.resolve(1).then(() => console.log('async'))
-}
+fn()
 ```
+
+**第一种情况是抛出错误且不会继续执行，第二种情况是打印错误会继续执行**
 
 ## 宏任务，微任务，事件循环
 
