@@ -179,30 +179,27 @@ obj.next()  //Object {value: 2, done: false}
 ...
 obj.next()  //Object {value: 9 done: false}
 obj.next()  //Object {value: undefined, done: true}
+```
 
-//计数
-funtion* count(){
-    let c=0
-    while(true){
-        yield c++
+### for...of 与 Generator
+
+```js
+const todos = {
+    life: ['吃饭', '睡觉', '打豆豆'],
+    learn: ['语文', '数学', '外语'],
+    work: ['喝茶'],
+
+    [Symbol.iterator]: function * () {
+        const all = [...this.life, ...this.learn, ...this.work]
+        for(const item of all) {
+            yield item
+        }
     }
 }
-var countNum = count()
-countNum.next()
 
-//next方法可以传值
-funtion* count(){
-    let c=0
-    let status = false
-    while(!status){
-        status = yield c++ //还可以接收值，先接收值然后就暂停，赋值在后面
-    }
+for (let item of todos) {
+    console.log(item)
 }
-var countNum = count()
-countNum.next()
-countNum.next()
-countNum.next(true)//停止
-
 ```
 
 ## async和await
