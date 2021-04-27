@@ -9,6 +9,7 @@ categories: 算法
 * 求根到叶子节点数字之和（DFS）
 * 路径总和
 * 岛屿数量
+* 岛屿最大面积
 * 单词接龙（BFS）
 * N叉树的最大深度（BFS）
 * 打家劫舍三（DFS）
@@ -170,6 +171,38 @@ var numIslands = function(grid) {
         }
     }
     return count
+};
+```
+
+## 岛屿最大面积
+
+* [leetcode695](https://leetcode-cn.com/problems/max-area-of-island/)
+* 思路：和上题一样，在dfs的过程中计算面积即可
+
+```js
+var maxAreaOfIsland = function(grid) {
+    const dfs = (grid, row, col, i, j) => {
+        if (i < 0 || i >= row || j < 0 || j >= col || grid[i][j] == '0') {
+            return 0
+        }
+        grid[i][j] = '0'
+        let num = 1
+        num += dfs(grid, row, col, i + 1, j)
+        num += dfs(grid, row, col, i - 1, j)
+        num += dfs(grid, row, col, i, j + 1)
+        num += dfs(grid, row, col, i, j - 1)
+        return num
+    }
+    const row = grid.length, col = grid[0].length
+    let res = 0
+    for (let i = 0; i < row; i++) {
+        for (let j = 0; j < col; j++) {
+            if (grid[i][j] == '1') {
+                res = Math.max(res, dfs(grid, row, col, i, j))
+            }
+        }
+    }
+    return res
 };
 ```
 
