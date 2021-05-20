@@ -10,6 +10,7 @@ categories: 规范
   * 合并多条 commit 
 * VSCode 插件
 * vue-dev-tools
+* Jsonview
 * Iterm2 + oh my zsh
 
 ## git
@@ -106,6 +107,12 @@ git rebase -i head~3 // 合并最近三条commit
 ## vue-dev-tools
 
 > 控制台调试 vue
+
+## Jsonview
+
+* [地址](https://github.com/gildas-lormeau/JSONView-for-Chrome)
+
+> Chrome 查看 json 数据
 
 ## Iterm2 + oh my zsh
 
