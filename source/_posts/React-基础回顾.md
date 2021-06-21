@@ -309,8 +309,6 @@ class App extends Component {
 
 React 是基于组件的方式进行用户界面开发的. 组件可以理解为对页面中某一块区域的封装。
 
-<img src="./images/2.png" width="70%"/>
-
 #### 3.2 创建组件
 
 ##### 3.2.1 创建类组件
@@ -522,7 +520,7 @@ const Person = props => {
 
 #### 3.5 类组件生命周期函数
 
-<img src=https://user-gold-cdn.xitu.io/2019/12/15/16f0a0b3e20fa9aa?imageView2/0/w/1280/h/960/format/webp/ignore-error/1/>
+![](https://user-gold-cdn.xitu.io/2019/12/15/16f0a0b3e20fa9aa?imageView2/0/w/1280/h/960/format/webp/ignore-error/1/)
 
 在组件完成更新之前需要做某种逻辑或者计算，就需要用到快照
 
@@ -548,22 +546,20 @@ getSnapshotBeforeUpdate(prevProps, prevState) {
 // userContext.js
 import React from "react"
 
-const userContext = React.createContext("default value")
-const UserProvider = userContext.Provider
-const UserConsumer = userContext.Consumer
+const { Provider, Consumer } = React.createContext(defaultValue)
 
-export { UserProvider, UserConsumer }
+export { Provider, Consumer }
 ```
 
 ```js
 // App.js
-import { UserProvider } from "./userContext"
+import { Provider } from "./userContext"
 class App extends Component {
   render() {
     return (
-      <UserProvider value="Hello React Context">
-        <A />
-      </UserProvider>
+      <Provider value="Hello React Context(这是共享的数据)">
+        /*里面可以渲染对应的内容*/
+      </Provider>
     )
   }
 }
@@ -571,17 +567,15 @@ class App extends Component {
 
 ```js
 // C.js
-import { UserConsumer } from "./userContext"
+import { Consumer } from "./userContext"
 
 export class C extends Component {
   render() {
     return (
       <div>
-        <UserConsumer>
-          {username => {
-            return <div>{username}</div>
-          }}
-        </UserConsumer>
+        <Consumer>
+          {value => /*根据上下文  进行渲染相应内容*/}
+        </Consumer>
       </div>
     )
   }
@@ -613,7 +607,7 @@ export class C extends Component {
 
 ### 4. 表单
 
-#### 4.1 受控表单
+#### 4.1 [受控表单](https://zh-hans.reactjs.org/docs/forms.html#controlled-components)
 
 表单控件中的值由组件的 state 对象来管理，state对象中存储的值和表单控件中的值时同步状态的
 
@@ -638,7 +632,7 @@ class App extends Component {
 }
 ```
 
-#### 4.2 非受控表单
+#### 4.2 [非受控表单](https://zh-hans.reactjs.org/docs/uncontrolled-components.html)
 
 表单元素的值由 DOM 元素本身管理。
 
@@ -667,6 +661,11 @@ url地址与组件之间的对应关系，访问不同的url地址显示不同�
 
 #### 5.1.1 路由基本使用
 
+* Router放置在最外层
+
+* Link创建链接
+* Route设置和匹配路由规则 `<Route path="/index" component={Index}/>`，访问`index`路径时，显示`Index`组件。
+
 ```js
 // App.js
 import React from 'react';
@@ -681,7 +680,7 @@ function App() {
   return (
     <Router>
       <div>
-        <Link to="/index">首页</Link>
+        <Link to="/index">首页</Link>  
         <Link to="/news">新闻</Link>
       </div>
       <div>
@@ -754,6 +753,7 @@ class News extends Component {
     );
   }
 }
+
 class Detail extends Component {
   constructor(props) {
     super(props);

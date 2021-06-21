@@ -103,6 +103,7 @@ git rebase -i head~3 // 合并最近三条commit
 * vscode-icons
 * vue-helper插件：代码提示，函数跳转
 * Codelf：右键变量命名
+* any-rule：正则大全
 
 ## vue-dev-tools
 
