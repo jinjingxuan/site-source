@@ -1,5 +1,5 @@
 ---
-title: React基础回顾
+title: React基础（一）
 date: 2021-06-17 11:27:54
 categories: React
 ---
@@ -12,42 +12,65 @@ React 使用组件的方式构建用户界面。
 
 ### 2. JSX 语法
 
-在 React 中使用 JSX 语法描述用户界面，它是一种 JavaScript 语法扩展。
+它是一种 JavaScript 语法的扩展，React 使用它来描述用户界面长成什么样子。在 React 代码执行之前，Babel 会对将 JSX 编译为 React API。`React.createElement`会返回`Virtual DOM`，然后再转换为真实DOM
 
-在 React 代码执行之前，Babel 会将 JSX 语法转换为标准的 JavaScript API。
-
-JSX 语法就是一种语法糖，让开发人员使用更加舒服的代码构建用户界面。
+```html
+<!-- JSX -->
+<div className="container">
+  <h3>Hello React</h3>
+  <p>React is great </p>
+</div>
+```
 
 ```js
-class HelloMessage extends React.Component {
-  render() {
-    return (
-      <div>
-        Hello {this.props.name}
-      </div>
-    );
-  }
-}
-
-ReactDOM.render(
-  <HelloMessage name="Taylor" />,
-  document.getElementById('hello-example')
+// Babel 会对将 JSX 编译为 React API
+React.createElement(
+  "div",
+  {
+    className: "container"
+  },
+  React.createElement("h3", null, "Hello React"), // 三个参数，标签，属性，内容
+  React.createElement("p", null, "React is great")
 );
-
-// 相当于
-class HelloMessage extends React.Component {
-  render() {
-    return React.createElement(
-      "div",
-      null,
-      "Hello ",
-      this.props.name
-    );
-  }
-}
-
-ReactDOM.render(React.createElement(HelloMessage, { name: "Taylor" }), document.getElementById('hello-example'));
 ```
+
+```js
+// 返回对应的 Virtual DOM，三个属性type, props, children
+{
+  type: "div",
+  props: { className: "container" },
+  children: [
+    {
+      type: "h3",
+      props: null,
+      children: [
+        {
+          type: "text",
+          props: {
+            textContent: "Hello React"
+          }
+        }
+      ]
+    },
+    {
+      type: "p",
+      props: null,
+      children: [
+        {
+          type: "text",
+          props: {
+            textContent: "React is great"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+从两种语法对比来看，JSX 语法的出现是为了让 React 开发人员编写用户界面代码更加轻松。
+
+[Babel REPL](https://babeljs.io/repl)
 
 #### 2.1 在 JSX 中使用表达式
 
