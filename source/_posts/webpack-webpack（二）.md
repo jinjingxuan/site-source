@@ -7,6 +7,7 @@ categories: webpack
 * webpack插件机制
 * webpack dev server
 * Sourcemap
+* splitChunks
 
 ## webpack插件机制
 

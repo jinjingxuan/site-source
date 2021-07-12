@@ -145,6 +145,8 @@ module.exports = {
 }
 ```
 
+[splitChunks用法详解](https://zhuanlan.zhihu.com/p/152097785)
+
 ### 动态导入
 
 > 需要某个模块时再去加载，动态导入的模块会被自动分包
@@ -162,12 +164,12 @@ const render = () => {
   mainElement.innerHTML = ''
   // 根据 hash 值动态导入
   if (hash === '#posts') {
-    // 魔法注释添加文件名
+    // 魔法注释可以设置打包后文件名
     import(/* webpackChunkName: 'components' */'./posts/posts').then(({ default: posts }) => {	
       mainElement.appendChild(posts())
     })
   } else if (hash === '#album') {
-    // 魔法注释添加文件名
+    // 魔法注释可以设置打包后文件名
     import(/* webpackChunkName: 'components' */'./album/album').then(({ default: album }) => {
       mainElement.appendChild(album())
     })

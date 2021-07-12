@@ -1,17 +1,16 @@
 ---
-title: git规范与常用插件
-date: 2020-12-18 11:27:54
+title: git操作
+date: 2020-12-17 11:27:54
 categories: 规范
 ---
 
 * git
-  * commit 规范
-  * sourceTree
-  * 合并多条 commit 
-* VSCode 插件
-* vue-dev-tools
-* Jsonview
-* Iterm2 + oh my zsh
+
+* commit 规范
+* sourceTree
+* 合并多条 commit 
+* git stash
+* git commit --amend
 
 ## git
 
@@ -82,44 +81,26 @@ git rebase -i head~3 // 合并最近三条commit
 
 > 带 `--soft` 参数的区别在于把改动内容添加到暂存区 相当于执行了`git add .`
 
-## VSCode 常用插件
+### git stash
 
-* Git History： 查看 git 历史
-* Leetcode：刷题必备
-* Bracket Pair Colorizer：括号匹配
-* GitLens：在 vscode 上使用 git 功能
-* Chinese (Simplified) Language Pack for Visual Studio Code：中文设置
+场景：正在feature分支写代码时，线上出现bug，需要切回master修复
 
-> 安装后，在 `locale.json` 中添加 `"locale": "zh-cn"`，即可载入中文（简体）语言包。要修改 `locale.json`，你可以同时按下 `Ctrl+Shift+P` 打开**命令面板**，之后输入 "config" 筛选可用命令列表，最后选择**配置语言**命令。
+```js
+git stash
+git checkout master
+// 修复中...
+git checkout <feture_branch> //切换刚才功能开发的分支
+git stash pop //取出修改
+```
 
-* Babel JavaScript：JavaScript 语法高亮显示
-* ESLint
-* Live Server
-* open in browser
-* Minapp：微信小程序标签、属性的智能补全
-* wechat-snippet：微信小程序代码辅助
-* wxml：微信小程序 wxml 格式化以及高亮组件
-* Vetur: 支持vue文件的语法高亮显示，除了支持template模板以外，还支持大多数主流的前端开发脚本和插件，比如Sass和TypeScript
-* vscode-icons
-* vue-helper插件：代码提示，函数跳转
-* Codelf：右键变量命名
-* any-rule：正则大全
+### git commit --amend
 
-## vue-dev-tools
+[修改git提交记录用法详解](https://zhuanlan.zhihu.com/p/100243017)
 
-> 控制台调试 vue
+### 拉取本地不存在的远程分支
 
-## Jsonview
-
-* [地址](https://github.com/gildas-lormeau/JSONView-for-Chrome)
-
-> Chrome 查看 json 数据
-
-## Iterm2 + oh my zsh
-
-[iTerm2 + Oh My Zsh 打造舒适终端体验](https://segmentfault.com/a/1190000014992947)
-
-
-
-
+```js
+git checkout -b 1.0 origin/1.0
+git pull
+```
 

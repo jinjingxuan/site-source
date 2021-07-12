@@ -68,6 +68,8 @@ module.exports = {
 }
 ```
 
+[path.join与path.resolve](https://blog.csdn.net/lychee_xiahua/article/details/112791840)
+
 ## 如何打包css文件
 
 因为webpack默认打包js文件，所以我们需要额外的loader来处理，`cnpm install -D style-loader css-loader`
