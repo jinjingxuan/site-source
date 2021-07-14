@@ -1,5 +1,5 @@
 ---
-title: san-store
+title: san-store/san-update
 date: 2021-07-13 11:27:54
 categories: San
 ---
@@ -165,3 +165,23 @@ connect.san(
 )(UserComponent);
 ```
 
+## san-update
+
+**Immutable Data**
+
+JavaScript 中的对象一般是可变的（Mutable），因为使用了引用赋值。
+
+Immutable Data是指一旦被创造后，就不可以被改变的数据。
+
+在javascript中我们可以通过deep clone来模拟Immutable Data，就是每次对数据进行操作，新对数据进行deep clone出一个新数据。但是深拷贝是用递归的方式实现的，十分消耗性能，所以诞生了Immutable Data
+
+**可以理解为优化后的深拷贝**。
+
+但是社区的库普遍存在一些问题，如：
+
+1. 指令不够。除最基本的`set`、`push`、`unshift`、`merge`等功能外，其它功能难以方便地补充
+2. 使用不便。当需要对一个对象的多个属性进行更新时，组装一个复杂的更新指令并不容易
+
+`san-update`希望在社区经验的基础之上，通过提供更强大的功能和方便的使用方式（如链式调用）来简化基于不可变对象的系统开发
+
+具体使用可看：[san-update官方文档](https://github.com/baidu/san-update)
